@@ -1,0 +1,152 @@
+var config = require('./Config');
+var express = require('express');
+var basicAuth = require('basic-auth');
+var _ = require('lodash');
+var pushAssociations = require('./PushAssociations');
+var push = require('./PushController');
+
+var app = express();
+
+var myUser;
+
+// Middleware
+app.use(express.compress());
+app.use(express.bodyParser());
+
+
+var auth = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === myUser.user && user.pass === myUser.password) {
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+};
+
+
+app.use(function(err, req, res, next) {
+    res.status(500);
+    res.render('error', { error: err });
+});
+
+app.post('/*',function (req, res, next) {
+    if (req.is('application/json')) {
+        next();
+    } else {
+        res.status(406).send();
+    }
+});
+
+// Main API
+app.post('/subscribe', function (req, res) {
+    var deviceInfo = req.body;
+    push.subscribe(deviceInfo);
+    
+    res.send(200);
+});
+
+app.post('/unsubscribe', function (req, res) {
+    var data = req.body;
+
+    if (data.user) {
+        push.unsubscribeUser(data.user);
+    } else if (data.token) {
+        push.unsubscribeDevice(data.token);
+    } else {
+        return res.send(503);
+    }
+
+    res.send(200);
+});
+
+app.post('/send', function (req, res) {
+    var notifs = [req.body];
+
+    var notificationsValid = sendNotifications(notifs);
+
+    res.status(notificationsValid ? 200 : 400).send();
+});
+
+app.post('/sendBatch', function (req, res) {
+    var notifs = req.body.notifications;
+
+    var notificationsValid = sendNotifications(notifs);
+
+    res.status(notificationsValid ? 200 : 400).send();
+});
+
+// Utils API
+app.get('/users/:user/associations', function (req, res) {
+    pushAssociations.getForUser(req.params.user, function (err, items) {
+        if (!err) {
+            res.send({"associations": items});
+        } else {
+            res.status(503).send();
+        }
+    });
+});
+
+app.get('/users', function (req, res) {
+    pushAssociations.getAll(function (err, pushAss) {
+        if (!err) {
+            var users = _(pushAss).map('user').unique().value();
+            var deviceToken = _(pushAss).map('token').unique().value();
+            res.send({
+                "users": users,
+                // DEBUG Information
+                "token": deviceToken
+            });
+        } else {
+            res.status(503).send()
+        }
+    });
+});
+
+app.delete('/users/:user', function (req, res) {
+    pushController.unsubscribeUser(req.params.user);
+    res.send('ok');
+});
+
+
+app.use('/',auth);
+app.use('/', express.static(__dirname + '/../public'));
+
+
+// Helpers
+function sendNotifications(notifs) {
+
+    notifs.forEach(function (notif) {
+        var users = notif.users,
+            androidPayload = notif.data;
+  
+
+        var fetchUsers = users ? pushAssociations.getForUsers : pushAssociations.getAll,
+            callback = function (err, pushAssociations) {
+                if (err) return;
+                console.log('Web.js-line 137: ' + JSON.stringify(pushAssociations) + ' ; ' + JSON.stringify(androidPayload));
+                push.send(pushAssociations, androidPayload);
+            },
+            args = users ? [users, callback] : [callback];
+
+        // TODO: optim. -> mutualise user fetching ?
+        fetchUsers.apply(null, args);
+    });
+
+    return true;
+}
+
+exports.start = function () {
+    app.listen(config.get('webPort'));
+    myUser=config.get('auth');
+    console.log('Listening on port ' + config.get('webPort') + "...");
+};

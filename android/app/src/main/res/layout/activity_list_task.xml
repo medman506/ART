@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/task_tv_todo_headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/task_tf_task"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/task_headline" />
+
+    <TextView
+        android:id="@+id/task_tv_todo_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_tv_todo_headline"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/task_tv_where_headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_tv_todo_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/task_tf_where"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/task_headline" />
+
+    <TextView
+        android:id="@+id/task_tv_gmaps_links"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_tv_where_headline"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="88dp"
+        android:text="@string/task_tf_show_in_gmaps"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/wallet_link_text_light" />
+
+    <TextView
+        android:id="@+id/task_tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/task_bt_dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_tv_gmaps_links"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="69dp"
+        android:background="@color/colorAccent"
+        android:text="@string/task_bt_dismiss" />
+
+</RelativeLayout>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ART - Alert Response Teams</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href='css/select2.css'/>
+    <link rel="stylesheet" href="css/toastr.min.css" />
+    <link rel="stylesheet" href="css/toastr-responsive-1.0.2.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/material.brown-orange.min.css" />
+    <link rel="stylesheet" href="css/art.css">
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">ART - Alert Response Teams</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Navigation</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="./index.html">Home</a>
+                <a class="mdl-navigation__link" href="./about.html">About us</a>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid">
+                <!-- main content start -->
+                <div class="mdl-cell mdl-cell--9-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+                    <div class="googlemap-card-wide mdl-card">
+                        <div class="mdl-card__supporting-text">
+                            <div id="map">
+                                <!-- Google Map -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col mdl-cell--12-col-phone mdl-cell--12-col-tablet">
+                    <div class="aup-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3><i class="material-icons">face</i> Active Users</h3>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            <table class="aup-table mdl-data-table mdl-js-data-table -mdl-shadow--1dp">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- table content loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="alert-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <h3><i class="material-icons">warning</i> Alert</h3>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            <form id="pushForm" class="well form-horizontal" action="" method="POST">
+                                <fieldset>
+                                    <div class="control-group">
+                                        <label class="control-label" for="users">Users:</label>
+                                        <div class="controls">
+                                            <select name="users" id="users" multiple style="width: 100%"></select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="control-group">
+                                        <label class="control-label" for="androidOptions">Art:</label>
+                                        <div class="controls">
+                                            <select id="message" name="message" size="5">
+                                                <option>Intern_Still</option>
+                                                <option>Intern_Herz</option>
+                                                <option>Intern_Atem</option>
+                                                <option>Chir_Trauma</option>
+                                                <option>Chir_Blutung</option>
+                                                <option>Verkehr_Strasse</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="control-group">
+                                        <label class="control-label" for="androidOptions">Adresse:</label>
+                                        <div class="controls">
+                                            <input id="adress" name="adress" type="text" placeholder="Strasse Nr, PLZ Ort">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <button class="alert-send-button mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+                                    Send!
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- main content end -->
+            </div>
+        </main>
+        <footer class="mdl-mini-footer">
+            <div class="mdl-mini-footer__left-section">
+                <div class="mdl-logo">ART</div>
+                <ul class="mdl-mini-footer__link-list">
+                    <li><a href="./help.html">Help</a></li>
+                    <li><a href="http://kerbtech.at">Kerbtech</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Material Design Scripts -->
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.min.js"></script>
+    <!-- JQuery Script -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Google Maps Script -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <!-- Custom Google Maps Script -->
+    <script src="./js/map.js"></script>
+    <!-- Device Orientation Script -->
+    <script src="./lib/device.js"></script>
+
+    <!-- Pushserver scripts -->
+    <script src="lib/select2.min.js"></script>
+    <script src="lib/toastr.min.js"></script>
+
+    <script>
+        window.addEventListener("orientationchange", function () {
+            // Announce the new orientation number
+            if (device.mobile() && device.portrait()) {
+                alert("This website is optimized for portrait mode. Please turn your phone!");
+            } else if (device.tablet() && device.portrait()) {
+                alert("This website is optimized for portrait mode. Please turn your tablet!");
+            }
+        }, false);
+    </script>
+
+    <script>
+        (function () {
+            // Init code mirror
+            $('.json-textarea').each(function () {
+                $(this).attr('autocapitalize', 'off')
+                    .attr('autocorrect', 'off')
+                    .attr('required', true);
+
+                var editor = CodeMirror.fromTextArea(this, {
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    extraKeys: {
+                        "Enter": "newlineAndIndentContinueComment"
+                    },
+                    mode: {
+                        name: "javascript",
+                        json: true
+                    },
+                    theme: 'elegant'
+                });
+                editor.setSize('100%', '150px');
+                $(this).parent().siblings('label').click(function () {
+                    editor.focus();
+                });
+            });
+
+            // Init select2
+            $("#users").select2({
+                tokenSeparators: [",", " "],
+                placeholder: "(Optional, defaults to everyone)"
+            });
+
+            toastr.options = { "positionClass": "toast-bottom-right" }
+                // Init user list
+            $.get('http://kerbtech.diphda.uberspace.de/art/users', function (data) {
+                var users = [];
+                var latitude = [];
+                var longitude = [];
+                var locations = [];
+                JSON.parse(data).forEach(function (user) {
+                    users.push(user.user),
+                        latitude.push(user.latitude),
+                        longitude.push(user.longitude),
+                        locations.push([user.user, user.latitude, user.longitude]);
+                });
+                var usersSelect = $('#users');
+                var usersTable = $('.aup-table');
+                if (typeof users[0] == 'undefined') {
+                    usersTable.find('tbody').append($('<tr><td class="mdl-data-table__cell--non-numeric">No users active!</td></tr>'));
+                }
+                users.forEach(function (user) {
+                    usersSelect.append(new Option(user));
+                    usersTable.find('tbody').append($('<tr><td class="mdl-data-table__cell--non-numeric">' + user + '</td></tr>'));
+                });
+                setLocations(locations, initMap);
+                toastr.success('Users loaded !');
+            });
+
+            // Bind form submit
+            $('#pushForm').submit(function (event) {
+                sendPush(formValues('#pushForm'));
+                return false;
+            });
+
+            function formValues(selector) {
+                return $(selector)
+                    .serializeArray()
+                    .reduce(function (prev, curr) {
+                        var curVal = curr.value.trim();
+
+                        if (prev[curr.name] === undefined) {
+                            prev[curr.name] = curVal;
+                        } else {
+                            if (typeof prev[curr.name] !== "object")
+                                prev[curr.name] = [curVal];
+
+                            prev[curr.name].push(curVal);
+                        }
+
+                        return prev;
+                    }, {});
+            }
+
+            function parseJSON(inputObject) {
+                var outputObject = {
+                    'message': inputObject.message,
+                    'adress': inputObject.adress,
+                    'link': 'http://maps.google.com/?q=' + encodeURIComponent(inputObject.adress)
+                };
+                return outputObject;
+            }
+
+            function sendPush(formValues) {
+                var pushNotification = {};
+                if (formValues.users)
+                    pushNotification.users = [].concat(formValues.users);
+
+                pushNotification.data = parseJSON(formValues);
+
+                console.log('test.html-line 180: ' + JSON.stringify(pushNotification));
+
+                $.ajax({
+                    url: 'http://kerbtech.diphda.uberspace.de/art/send',
+                    type: 'POST',
+                    data: JSON.stringify(pushNotification),
+                    contentType: 'application/json',
+                    success: function () {
+                        toastr.success('Push message successfully sent!');
+                    },
+                    error: function () {
+                        toastr.error('Failed to send push message');
+                    }
+                });
+            }
+
+        })();
+    </script>
+</body>
+
+</html>

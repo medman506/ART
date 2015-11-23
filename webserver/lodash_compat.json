@@ -1,0 +1,12 @@
+{
+    "webPort": 62888,
+    "auth": {
+        "user":"moappdev", 
+        "password": "leitstellenfruechtchen"
+    },
+    "mongodbUrl": "mongodb://ARTdiphda:juW4gTdc@127.0.0.1:20624/ARTdb",
+
+    "gcm": {
+        "apiKey": "AIzaSyCNTPu0BUd-jLiBuNtT8VvWkebycX5yUM0"
+    }
+}

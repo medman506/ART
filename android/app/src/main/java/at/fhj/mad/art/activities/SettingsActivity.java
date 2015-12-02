@@ -374,6 +374,10 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             editor.putBoolean("active", true);
             editor.apply();
             startLocationService();
+            // User shouldn't be able to change username if he's successfully subscribed
+            input.setFocusable(false);
+            input.setFocusableInTouchMode(false);
+            input.setClickable(false);
         }
     }
 
@@ -387,6 +391,10 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             editor.putBoolean("active", false);
             editor.apply();
             stopLocationService();
+            // User should be able to change username after he successfully unsubscribed
+            input.setFocusable(true);
+            input.setFocusableInTouchMode(true);
+            input.setClickable(true);
         }
     }
 

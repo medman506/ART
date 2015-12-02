@@ -138,11 +138,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
      * @return true, if id is available, false if not
      */
     private boolean readIdAvailable(long id) {
-        boolean result = true;
+        boolean result = false;
         String sql = "SELECT id FROM " + TABLE_NAME + " WHERE id=" + id + ";";
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
         if (cursor.moveToFirst()) {
-            result = false;
+            result = true;
         }
         cursor.close();
         return result;

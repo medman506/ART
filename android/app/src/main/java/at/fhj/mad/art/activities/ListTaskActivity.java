@@ -74,7 +74,6 @@ public class ListTaskActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.list_toast_task_not_deleted), Toast.LENGTH_SHORT).show();
-
                 }
             }
         });

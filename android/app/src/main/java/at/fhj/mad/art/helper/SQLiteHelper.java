@@ -15,8 +15,8 @@ import at.fhj.mad.art.model.Task;
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    //Change if Changes to db structure are made
-    //Updates background db structure
+    // Increase DATABASE_VERSION by 1 if db structure changed
+    // Updates background db structure
     private static final int DATABASE_VERSION = 3;
     private static final String TABLE_NAME = "tasks";
     private static final String KEY_UNIQUE_ID = "id";
@@ -86,6 +86,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(TABLE_NAME, null, cv);
     }
 
+    /**
+     * Read all Tasks available in the Database
+     *
+     * @return A list of all available Tasks
+     */
     public ArrayList<Task> readAllTasks() {
         String sql = "SELECT * FROM " + TABLE_NAME + ";";
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
@@ -110,29 +115,46 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    /**
+     * Remove a Task from the Tabase
+     *
+     * @param t Task-Object which should be deleted
+     * @return true, if successfully deleted, false if not
+     */
     public boolean deleteTask(Task t) {
         boolean result = false;
         String sql = "DELETE FROM " + TABLE_NAME + " WHERE id=" + t.getId() + ";";
         getWritableDatabase().execSQL(sql);
-        if (readIdAvailable(t.getId())) {
+        if (!readIdAvailable(t.getId())) {
             result = true;
         }
         return result;
     }
 
+    /**
+     * Checks if task is available in the Database or not
+     *
+     * @param id id of task, which should be checked
+     * @return true, if id is available, false if not
+     */
     private boolean readIdAvailable(long id) {
-        boolean result = false;
+        boolean result = true;
         String sql = "SELECT id FROM " + TABLE_NAME + " WHERE id=" + id + ";";
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
-        if (!cursor.moveToFirst()) {
-            result = true;
+        if (cursor.moveToFirst()) {
+            result = false;
         }
         cursor.close();
         return result;
     }
 
+    /**
+     * Get a Task from the Database
+     *
+     * @param id of the Task
+     * @return Desired Task-Object
+     */
     public Task readId(long id) {
-
         String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id=" + id + ";";
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
         cursor.moveToFirst();
@@ -151,5 +173,4 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         return task;
     }
-
 }

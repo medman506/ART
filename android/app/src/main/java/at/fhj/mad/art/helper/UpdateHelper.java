@@ -23,6 +23,7 @@ public class UpdateHelper extends BroadcastReceiver {
     /**
      * Broadcast to propagate a new Task is available
      * (Used to update ListView when user is in app
+     *
      * @param ctx
      * @param intent
      */

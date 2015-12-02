@@ -4,7 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Helper Class to detect if user inputs an swipe action
+ * Helper Class to detect if user inputs an swipe action on the ListView
  */
 public class SwipeDetector implements View.OnTouchListener {
 
@@ -47,20 +47,18 @@ public class SwipeDetector implements View.OnTouchListener {
                         mSwipeDetected = Action.RL;
                         return true;
                     }
-                } else
-
                     // vertical swipe detection
-                    if (Math.abs(deltaY) > MIN_DISTANCE) {
-                        // top or down
-                        if (deltaY < 0) {
-                            mSwipeDetected = Action.TB;
-                            return false;
-                        }
-                        if (deltaY > 0) {
-                            mSwipeDetected = Action.BT;
-                            return false;
-                        }
+                } else if (Math.abs(deltaY) > MIN_DISTANCE) {
+                    // top or down
+                    if (deltaY < 0) {
+                        mSwipeDetected = Action.TB;
+                        return false;
                     }
+                    if (deltaY > 0) {
+                        mSwipeDetected = Action.BT;
+                        return false;
+                    }
+                }
                 return true;
             }
         }

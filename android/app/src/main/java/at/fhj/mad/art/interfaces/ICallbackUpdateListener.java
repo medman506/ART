@@ -6,7 +6,7 @@ package at.fhj.mad.art.interfaces;
 public interface ICallbackUpdateListener {
 
     /**
-     * Update the Tasklist
+     * Update the Tasklist with the newest Tasks from the DB
      */
     void handleListUpdate();
 }

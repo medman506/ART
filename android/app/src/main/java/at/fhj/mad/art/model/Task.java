@@ -22,6 +22,7 @@ public class Task {
         setMinute(c.get(Calendar.MINUTE));
         setHour(c.get(Calendar.HOUR_OF_DAY));
         setDay(c.get(Calendar.DAY_OF_MONTH));
+        // +1 because per default January is 0, February 1 etc.
         setMonth(c.get(Calendar.MONTH) + 1);
         setYear(c.get(Calendar.YEAR));
     }
@@ -33,6 +34,7 @@ public class Task {
         setMinute(c.get(Calendar.MINUTE));
         setHour(c.get(Calendar.HOUR_OF_DAY));
         setDay(c.get(Calendar.DAY_OF_MONTH));
+        // +1 because per default January is 0, February 1 etc.
         setMonth(c.get(Calendar.MONTH) + 1);
         setYear(c.get(Calendar.YEAR));
     }
@@ -51,6 +53,11 @@ public class Task {
                 '}';
     }
 
+    /**
+     * Formats daytime with leading zeros
+     *
+     * @return daytime with leading zeros, if needed
+     */
     public String getDayTime() {
         int hour = getHour();
         int minute = getMinute();
@@ -84,6 +91,11 @@ public class Task {
 
     }
 
+    /**
+     * Get the right dateformat for your country with leading zeros.
+     *
+     * @return dateformat for your country with leading zero
+     */
     public String getDate() {
         String zmonth, zday, date;
 

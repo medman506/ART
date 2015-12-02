@@ -70,11 +70,11 @@
         </service>
         <!-- [END instanceId_listener] -->
 
+        <!-- As well as Activities, Services must be declared in the Manifest -->
         <service
             android:name=".gcm.RegistrationIntentService"
             android:exported="false" />
 
-        <!-- As Activities, Services must be declared in the Manifest -->
         <service android:name=".services.PositionService" />
 
     </application>

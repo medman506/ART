@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
 
         activityContext = this;
 
-        //Handler for GPS unavailable
+        // Handler receives 1 if LocationService is started and GPS is not activated
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -103,8 +103,8 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
 
         sw_active.setChecked(prefs.getBoolean("active", false));
 
-        //Toggle active and inactive
-        //Save state to shared prefs
+        // Toggle active and inactive
+        // Save state to shared prefs
         sw_active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -172,12 +172,14 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             input.setText(prefs.getString("username", ""));
         }
 
+        // User shouldn't be able to change username if he's active
         if (prefs.getBoolean("active", false)) {
             input.setFocusable(false);
             input.setFocusableInTouchMode(false);
             input.setClickable(false);
         }
 
+        // Show toast if user still wants to change his username if he's active
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,7 +189,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             }
         });
 
-        //Handling save of username
+        // Handling save of username
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,7 +271,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
     }
 
     /**
-     * Makes an HttpRequest to the Server to unsubscribe from the Service
+     * Makes an HttpRequest to the server to unsubscribe from the service
      * Throws a Toast if the Username is missing
      *
      * @throws JSONException                Thrown by JSONObject
@@ -292,6 +294,9 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         }
     }
 
+    /**
+     * Calls the helper method to check the current server status
+     */
     private void updateServerStatus() {
         HttpGETHelper httpGETHelper = new HttpGETHelper();
         httpGETHelper.setCallbackHttpHelper(this);
@@ -300,7 +305,10 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         httpGETHelper.execute(url);
     }
 
-    //Location Service
+    /**
+     * Starts the location service
+     * Messenger is passed through the Intent to communicate with the handler
+     */
     private void startLocationService() {
         Intent i = new Intent(this, PositionService.class);
         Log.i("StartLocationService", "Triggered");
@@ -309,12 +317,21 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         startService(i);
     }
 
+    /**
+     * Stops the location service
+     */
     private void stopLocationService() {
         Intent i = new Intent(this, PositionService.class);
         Log.i("StopLocationService", "Triggered");
         stopService(i);
     }
 
+    /**
+     * Checks if given Service-Class is already a running Service or not.
+     *
+     * @param serviceClass Service-Class which should be checked
+     * @return true or false
+     */
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -325,7 +342,10 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         return false;
     }
 
-    //Dialog if no gps is activated
+    /**
+     * Shows a Dialog if no gps is activated
+     * Gives the User the opinion to activate GPS
+     */
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
         builder.setMessage(getResources().getString(R.string.dialog_no_gps))

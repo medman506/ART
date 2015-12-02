@@ -23,7 +23,6 @@ public interface ICallbackHttpPOSTHelper {
 
     /**
      * Called by HttpPOSTHelper after either a subscribe or unsubscribe Request has failed.
-     *
      */
     void finished_error();
 

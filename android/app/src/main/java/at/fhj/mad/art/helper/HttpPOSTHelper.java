@@ -91,6 +91,11 @@ public class HttpPOSTHelper extends AsyncTask<String, String, String> {
         return result + "," + params[2];
     }
 
+    /**
+     * Callback to calling methods
+     *
+     * @param s return parameter from doInBackground-Method
+     */
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
@@ -120,7 +125,7 @@ public class HttpPOSTHelper extends AsyncTask<String, String, String> {
     /**
      * Set the Activity, where the ICallbackHttpPOSTHelper Interface is implemented
      *
-     * @param callback Instance of the Activity, where the ICallbackHttpPOSTHelper Interface is implemented
+     * @param callback Activity which needs data from this helper class
      */
     public void setCallback(ICallbackHttpPOSTHelper callback) {
         callbackHttpHelper = callback;

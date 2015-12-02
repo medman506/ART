@@ -62,7 +62,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
 
         SharedPreferences prefs = getSharedPreferences(SettingsActivity.SHARED_PREFS_SETTINGS, 0);
 
-        //Redirect to settings screen if none is "logged in"
+        // Redirect to settings screen if none is "logged in"
         if (prefs.getString("username", "").isEmpty()) {
             Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(settingsIntent);
@@ -70,17 +70,17 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         }
 
         super.onCreate(savedInstanceState);
-        //Associate with layout
+        // Associate with layout
         setContentView(R.layout.activity_list);
-        //set this as callback in helper
+        // set this as callback in helper
         myUpdateHelper = new UpdateHelper(this);
 
-        //Iniate Strings for Hamburger Menu
+        // Initiate Strings for Hamburger Menu
         SETTINGS_STRING = getResources().getString(R.string.nav_settings);
         CONTACT_STRING = getResources().getString(R.string.nav_contact);
         SERVER_UPDATE_STRING = getResources().getString(R.string.nav_server_update);
 
-        //Init Hamburger menu
+        // Init Hamburger menu
         mDrawerList = (ListView) findViewById(R.id.settings_navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -94,20 +94,19 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         // Gives visual Feedback that the button has been pressed
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        //get list from layout
+        // get list from layout
         ListView list = (ListView) findViewById(R.id.list);
 
-        //Getting Tasks  from DB
+        // Getting Tasks  from DB
         sqLiteHelper = SQLiteHelper.getInstance(getApplicationContext());
         saved_list = sqLiteHelper.readAllTasks();
         Collections.reverse(saved_list);
 
-        //Add Tasks to Listview
+        // Add Tasks to Listview
         adapter = new TwoLineAdapter(this, saved_list);
         list.setAdapter(adapter);
 
-
-        //Adding swipedetector
+        // Adding swipedetector
         final SwipeDetector swipeDetector = new SwipeDetector();
         list.setOnTouchListener(swipeDetector);
 
@@ -130,10 +129,10 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
                         }
                     }
                 } else {
-                    //If no swipe, just click: open task
+                    // If no swipe, just click: open task
                     Intent i = new Intent(getApplicationContext(), ListTaskActivity.class);
 
-                    // Cant send whole task-object through Intent because implementing the Parcable-Interface in Task is too difficult (for now)
+                    // Can't send whole task-object through Intent because implementing the Parcable-Interface in Task is too difficult (for now)
                     i.putExtra("taskID", saved_list.get(position).getId());
 
                     startActivity(i);
@@ -240,7 +239,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     public void onResume() {
         super.onResume();
         //Register update receiver when user is on screen
-        if (null != myUpdateHelper) {
+        if (myUpdateHelper != null) {
             registerReceiver(myUpdateHelper, new IntentFilter(UpdateHelper.UPDATE_STRING));
             resetList();
         }
@@ -277,6 +276,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
 
     /**
      * Handles Menu button press
+     *
      * @param keyCode
      * @param event
      * @return
@@ -317,6 +317,6 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
      */
     @Override
     public void handleListUpdate() {
-      resetList();
+        resetList();
     }
 }

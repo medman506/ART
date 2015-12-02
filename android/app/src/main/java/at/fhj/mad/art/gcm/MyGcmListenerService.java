@@ -72,7 +72,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
-        //Only notify if active, and actual data was received
+        // Only notify if active, and actual data was received
         SharedPreferences prefs = getSharedPreferences("Settings", 0);
         if (prefs.getBoolean("active", false) && data.getString("message", null) != null && data.getString("link", null) != null) {
             sendNotification(data, from);
@@ -90,7 +90,7 @@ public class MyGcmListenerService extends GcmListenerService {
     private void sendNotification(Bundle data, String from) {
         // To show multiple Notifications, assign unique notification-id
 
-        //Adding the new Task
+        // Adding the new Task
         Task t = new Task();
         t.setMessage(data.getString("message", "-"));
         t.setTopic(from);
@@ -99,21 +99,21 @@ public class MyGcmListenerService extends GcmListenerService {
         SQLiteHelper sqLiteHelper = SQLiteHelper.getInstance(getApplicationContext());
         long id = sqLiteHelper.addTask(t);
 
-        //Prepare Intent
+        // Prepare Intent
         Intent intent = new Intent(this, ListTaskActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("taskID", id);
 
-        //Sending Broadcast that a new Item arrived( for users in listview)
+        // Sending Broadcast that a new Item arrived( for users in listview)
         sendBroadcast(new Intent(UpdateHelper.UPDATE_STRING));
 
-        //PendingIntent with parent stack
-        //Lets the user get back to listview if clicked on notification
-        //Backstack
+        // PendingIntent with parent stack
+        // Lets the user get back to listview if clicked on notification
+        // Backstack
         PendingIntent pendingIntent = TaskStackBuilder.create(getApplicationContext())
                 .addNextIntentWithParentStack(intent).getPendingIntent((int) id, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //Building the Notification which  will be shown
+        // Building the Notification which  will be shown
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher_icon))
                 .setSmallIcon(R.drawable.notification_icon)
@@ -126,7 +126,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
 
-        //Send Notification to screen
+        // Send Notification to screen
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify((int) System.currentTimeMillis(), notificationBuilder.build());

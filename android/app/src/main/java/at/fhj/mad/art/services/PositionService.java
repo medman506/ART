@@ -53,6 +53,7 @@ public class PositionService extends Service implements ICallbackPositionListene
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // Get messenger from the Intent to communicate with the activity
         if (intent != null) {
             messenger = intent.getParcelableExtra("messenger");
         }
@@ -62,24 +63,27 @@ public class PositionService extends Service implements ICallbackPositionListene
         String SHARED_PREFS_SETTINGS = "Settings";
         prefs = getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
 
-        // Needed for httpPOSTHelper.setCallback()
+        // Needed for httpPOSTHelper.setCallback() in the CountDownTimer
         positionService = this;
 
         isRunning = true;
 
         Log.i("Position-Service", "Service started");
 
-        // Start getting actual GPS-Position
+        // Get locationManager from Android if not initialized yet
         if (locationManager == null) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         }
 
+        // Start the Position Listener
         if (posList == null) {
             posList = new PositionListener();
             posList.setiCallbackPositionListener(this);
         }
 
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        // Check if detailed GPS is activated. If not, send Activity a message to
+        // trigger the GPS-Dialog
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Message message = Message.obtain(null, 1);
             try {
                 messenger.send(message);
@@ -88,12 +92,12 @@ public class PositionService extends Service implements ICallbackPositionListene
             }
         }
 
+        // Start getting actual GPS-Position
         //noinspection ResourceType
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, posList);
 
         // every 60 seconds do onFinish()
         // CountDownTimer(Future Task to be done (in MilliSec), countDownInterval (in MilliSec))
-
         cdt = new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -123,7 +127,7 @@ public class PositionService extends Service implements ICallbackPositionListene
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.posservice_toast_no_location), Toast.LENGTH_LONG).show();
                 }
 
-                // Restart Countdown to do this task every 5 seconds
+                // Restart Countdown to do this task every 60 seconds
                 if (isRunning) {
                     cdt.start();
                 }

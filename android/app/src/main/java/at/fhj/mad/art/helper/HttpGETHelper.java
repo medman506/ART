@@ -54,7 +54,8 @@ public class HttpGETHelper extends AsyncTask<String, String, String> {
 
     /**
      * Callback to calling methods
-     * @param s
+     *
+     * @param s return parameter from doInBackground-Method
      */
     @Override
     protected void onPostExecute(String s) {
@@ -67,6 +68,11 @@ public class HttpGETHelper extends AsyncTask<String, String, String> {
         }
     }
 
+    /**
+     * Sets the activity which implements the HttpGETHelper Interface
+     *
+     * @param callbackHttpHelper Activity which needs data from this helper class
+     */
     public void setCallbackHttpHelper(ICallbackHttpGETHelper callbackHttpHelper) {
         this.callbackHttpHelper = callbackHttpHelper;
     }

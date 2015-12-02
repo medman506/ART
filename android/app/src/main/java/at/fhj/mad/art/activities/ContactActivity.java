@@ -24,6 +24,7 @@ public class ContactActivity extends AppCompatActivity {
         Button btn_email = (Button) findViewById(R.id.contact_btn_email);
         Button btn_homepage = (Button) findViewById(R.id.contact_btn_homepage);
 
+        //Implicit Intents for mailing and displaying a webpage
         btn_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

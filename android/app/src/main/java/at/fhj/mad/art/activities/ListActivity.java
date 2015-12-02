@@ -33,22 +33,28 @@ import at.fhj.mad.art.model.Task;
 
 /**
  * Activity to display all saved Tasks
+ * Main Screen of app
  */
 public class ListActivity extends AppCompatActivity implements ICallbackUpdateListener {
 
+    //Strings for the Hamburger Menu
     private String SETTINGS_STRING;
     private String CONTACT_STRING;
     private String SERVER_UPDATE_STRING;
 
+    //Hamburger menu
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
 
+    //Custom list for displaying tasks
     private ArrayList<Task> saved_list;
     private TwoLineAdapter adapter;
 
+    //Updates list when notification is received
     private UpdateHelper myUpdateHelper;
+    //Helper class for db access
     private SQLiteHelper sqLiteHelper;
 
     @Override
@@ -56,6 +62,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
 
         SharedPreferences prefs = getSharedPreferences(SettingsActivity.SHARED_PREFS_SETTINGS, 0);
 
+        //Redirect to settings screen if none is "logged in"
         if (prefs.getString("username", "").isEmpty()) {
             Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(settingsIntent);
@@ -63,13 +70,17 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         }
 
         super.onCreate(savedInstanceState);
+        //Associate with layout
         setContentView(R.layout.activity_list);
+        //set this as callback in helper
         myUpdateHelper = new UpdateHelper(this);
 
+        //Iniate Strings for Hamburger Menu
         SETTINGS_STRING = getResources().getString(R.string.nav_settings);
         CONTACT_STRING = getResources().getString(R.string.nav_contact);
         SERVER_UPDATE_STRING = getResources().getString(R.string.nav_server_update);
 
+        //Init Hamburger menu
         mDrawerList = (ListView) findViewById(R.id.settings_navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -83,6 +94,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         // Gives visual Feedback that the button has been pressed
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        //get list from layout
         ListView list = (ListView) findViewById(R.id.list);
 
         //Getting Tasks  from DB
@@ -94,6 +106,8 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         adapter = new TwoLineAdapter(this, saved_list);
         list.setAdapter(adapter);
 
+
+        //Adding swipedetector
         final SwipeDetector swipeDetector = new SwipeDetector();
         list.setOnTouchListener(swipeDetector);
 
@@ -116,6 +130,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
                         }
                     }
                 } else {
+                    //If no swipe, just click: open task
                     Intent i = new Intent(getApplicationContext(), ListTaskActivity.class);
 
                     // Cant send whole task-object through Intent because implementing the Parcable-Interface in Task is too difficult (for now)
@@ -155,6 +170,10 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
 
     }
 
+    /**
+     * Resets the list to null
+     * Reloads and redisplays all tasks
+     */
     private void resetList() {
         if (adapter != null) {
             adapter.clear();
@@ -182,6 +201,9 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         });
     }
 
+    /**
+     * Setup Drawermenu and corresponding methods
+     */
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.nav_drawer_open, R.string.nav_drawer_close) {
 
@@ -206,6 +228,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+    // Lifecycle Activities following
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -216,6 +239,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     @Override
     public void onResume() {
         super.onResume();
+        //Register update receiver when user is on screen
         if (null != myUpdateHelper) {
             registerReceiver(myUpdateHelper, new IntentFilter(UpdateHelper.UPDATE_STRING));
             resetList();
@@ -225,6 +249,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     @Override
     protected void onPause() {
         super.onPause();
+        //UpdateHelper is not needed when user is not on screen
         unregisterReceiver(myUpdateHelper);
     }
 
@@ -250,6 +275,12 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         }
     }
 
+    /**
+     * Handles Menu button press
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Open/Close Drawer with Menu-Key (if the Device has one)
@@ -282,14 +313,10 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     /**
      * Refreshing the Listview when a new Notification arrives
      * Clears the old Elements and re-retrieves all items including new one from DB
+     * Implemented method from Updatehelper
      */
     @Override
     public void handleListUpdate() {
-        adapter.clear();
-        saved_list = sqLiteHelper.readAllTasks();
-        Collections.reverse(saved_list);
-        adapter.addAll(saved_list);
-        adapter.notifyDataSetChanged();
-
+      resetList();
     }
 }

@@ -44,6 +44,7 @@ import at.fhj.mad.art.services.PositionService;
 
 /**
  * Show SettingsActivity where the User can change his Username
+ * Also, User is redirected if on startup no username is set
  */
 public class SettingsActivity extends AppCompatActivity implements ICallbackHttpPOSTHelper, ICallbackHttpGETHelper {
 
@@ -69,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
 
         activityContext = this;
 
+        //Handler for GPS unavailable
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -101,6 +103,8 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
 
         sw_active.setChecked(prefs.getBoolean("active", false));
 
+        //Toggle active and inactive
+        //Save state to shared prefs
         sw_active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -159,8 +163,6 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
 
         cdt.start();
 
-        //OLD SETTINGS
-
         input = (EditText) findViewById(R.id.settings_et_username);
         Button btn_save = (Button) findViewById(R.id.settings_btn_save);
         context = getApplicationContext();
@@ -185,6 +187,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             }
         });
 
+        //Handling save of username
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,6 +300,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         httpGETHelper.execute(url);
     }
 
+    //Location Service
     private void startLocationService() {
         Intent i = new Intent(this, PositionService.class);
         Log.i("StartLocationService", "Triggered");
@@ -321,6 +325,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         return false;
     }
 
+    //Dialog if no gps is activated
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
         builder.setMessage(getResources().getString(R.string.dialog_no_gps))

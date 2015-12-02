@@ -20,6 +20,12 @@ public class UpdateHelper extends BroadcastReceiver {
         myUpdateListener = dataUpdateListener;
     }
 
+    /**
+     * Broadcast to propagate a new Task is available
+     * (Used to update ListView when user is in app
+     * @param ctx
+     * @param intent
+     */
     @Override
     public void onReceive(Context ctx, Intent intent) {
         // assuming data is available in the delivered intent

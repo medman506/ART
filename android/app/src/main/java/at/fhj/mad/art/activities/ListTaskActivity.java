@@ -33,11 +33,14 @@ public class ListTaskActivity extends AppCompatActivity {
         TextView tv_gmaps_link = (TextView) findViewById(R.id.task_tv_gmaps_links);
         TextView tv_address = (TextView) findViewById(R.id.task_tv_address);
 
+        //Get id of current task by extracting info from intent
         long id = getIntent().getExtras().getLong("taskID");
 
+        //Read from DB
         currentTask = sqLiteHelper.readId(id);
         Log.i("Tasklist", currentTask.toString());
 
+        //Setting information
         String message = currentTask.getMessage();
         String topics = currentTask.getTopic();
         String address = currentTask.getAddress();
@@ -46,6 +49,7 @@ public class ListTaskActivity extends AppCompatActivity {
         int month = currentTask.getMonth();
         int day = currentTask.getDay();
 
+        //Set in GUI, only if all data is set
         if ((!(message != null && message.equals("")) && !(topics != null && topics.equals("")) && !(link != null && link.equals("")) && year != 0 && month != 0 && day != 0)) {
             tv_todo_content.setText(message);
             tv_address.setText(address);
@@ -60,6 +64,8 @@ public class ListTaskActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.task_toast_data_from_list_error), Toast.LENGTH_SHORT).show();
         }
 
+        //DELETE BUTTON
+        //Finish on success
         Button delButton = (Button) findViewById(R.id.task_bt_dismiss);
         delButton.setOnClickListener(new View.OnClickListener() {
             @Override

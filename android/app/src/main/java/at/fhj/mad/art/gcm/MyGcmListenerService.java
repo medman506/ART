@@ -39,6 +39,9 @@ import at.fhj.mad.art.helper.SQLiteHelper;
 import at.fhj.mad.art.helper.UpdateHelper;
 import at.fhj.mad.art.model.Task;
 
+/**
+ * Receives Push Notifications
+ */
 public class MyGcmListenerService extends GcmListenerService {
 
     /**
@@ -69,6 +72,7 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
+        //Only notify if active, and actual data was received
         SharedPreferences prefs = getSharedPreferences("Settings", 0);
         if (prefs.getBoolean("active", false) && data.getString("message", null) != null && data.getString("link", null) != null) {
             sendNotification(data, from);
@@ -95,13 +99,17 @@ public class MyGcmListenerService extends GcmListenerService {
         SQLiteHelper sqLiteHelper = SQLiteHelper.getInstance(getApplicationContext());
         long id = sqLiteHelper.addTask(t);
 
+        //Prepare Intent
         Intent intent = new Intent(this, ListTaskActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("taskID", id);
 
-        //Sending Broadcast that a new Item arrived
+        //Sending Broadcast that a new Item arrived( for users in listview)
         sendBroadcast(new Intent(UpdateHelper.UPDATE_STRING));
 
+        //PendingIntent with parent stack
+        //Lets the user get back to listview if clicked on notification
+        //Backstack
         PendingIntent pendingIntent = TaskStackBuilder.create(getApplicationContext())
                 .addNextIntentWithParentStack(intent).getPendingIntent((int) id, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -118,9 +126,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
 
+        //Send Notification to screen
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         notificationManager.notify((int) System.currentTimeMillis(), notificationBuilder.build());
 
     }

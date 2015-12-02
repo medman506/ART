@@ -31,6 +31,9 @@ import java.io.IOException;
 
 import at.fhj.mad.art.R;
 
+/**
+ * Handles Registration
+ */
 public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";

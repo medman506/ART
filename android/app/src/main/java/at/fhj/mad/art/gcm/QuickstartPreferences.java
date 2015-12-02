@@ -16,6 +16,9 @@
 
 package at.fhj.mad.art.gcm;
 
+/**
+ * Saves static strings used in gcm
+ */
 public class QuickstartPreferences {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";

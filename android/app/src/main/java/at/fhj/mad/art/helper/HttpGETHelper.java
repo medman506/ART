@@ -52,6 +52,10 @@ public class HttpGETHelper extends AsyncTask<String, String, String> {
         return result;
     }
 
+    /**
+     * Callback to calling methods
+     * @param s
+     */
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);

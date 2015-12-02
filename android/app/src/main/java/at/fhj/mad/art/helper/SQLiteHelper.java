@@ -15,6 +15,8 @@ import at.fhj.mad.art.model.Task;
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
+    //Change if Changes to db structure are made
+    //Updates background db structure
     private static final int DATABASE_VERSION = 3;
     private static final String TABLE_NAME = "tasks";
     private static final String KEY_UNIQUE_ID = "id";

@@ -1,7 +1,7 @@
 package at.fhj.mad.art.interfaces;
 
 /**
- * Interface for our HttpGETHelper-Class
+ * Interface for our HttpStatusHelper-Class
  */
 public interface ICallbackHttpGETHelper {
 

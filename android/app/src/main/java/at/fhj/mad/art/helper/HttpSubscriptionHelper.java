@@ -20,7 +20,7 @@ import at.fhj.mad.art.interfaces.ICallbackHttpPOSTHelper;
  * <p/>
  * Created by kevin on 16.10.2015.
  */
-public class HttpPOSTHelper extends AsyncTask<String, String, String> {
+public class HttpSubscriptionHelper extends AsyncTask<String, String, String> {
 
     private ICallbackHttpPOSTHelper callbackHttpHelper;
 

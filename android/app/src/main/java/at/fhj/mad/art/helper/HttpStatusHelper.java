@@ -11,7 +11,7 @@ import at.fhj.mad.art.interfaces.ICallbackHttpGETHelper;
 /**
  * Helper Class to verify the actual Pushserver status (online or offline)
  */
-public class HttpGETHelper extends AsyncTask<String, String, String> {
+public class HttpStatusHelper extends AsyncTask<String, String, String> {
 
     private ICallbackHttpGETHelper callbackHttpHelper;
 
@@ -69,7 +69,7 @@ public class HttpGETHelper extends AsyncTask<String, String, String> {
     }
 
     /**
-     * Sets the activity which implements the HttpGETHelper Interface
+     * Sets the activity which implements the HttpStatusHelper Interface
      *
      * @param callbackHttpHelper Activity which needs data from this helper class
      */

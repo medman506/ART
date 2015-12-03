@@ -22,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import at.fhj.mad.art.R;
-import at.fhj.mad.art.helper.HttpPOSTHelper;
+import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.helper.PositionListener;
 import at.fhj.mad.art.interfaces.ICallbackHttpPOSTHelper;
 import at.fhj.mad.art.interfaces.ICallbackPositionListener;
@@ -40,7 +40,7 @@ public class PositionService extends Service implements ICallbackPositionListene
     private double longitude;
 
     private SharedPreferences prefs;
-    private HttpPOSTHelper httpPOSTHelper;
+    private HttpSubscriptionHelper httpSubscriptionHelper;
     private PositionService positionService;
     private LocationManager locationManager;
     private PositionListener posList;
@@ -63,7 +63,7 @@ public class PositionService extends Service implements ICallbackPositionListene
         String SHARED_PREFS_SETTINGS = "Settings";
         prefs = getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
 
-        // Needed for httpPOSTHelper.setCallback() in the CountDownTimer
+        // Needed for httpSubscriptionHelper.setCallback() in the CountDownTimer
         positionService = this;
 
         isRunning = true;
@@ -105,8 +105,8 @@ public class PositionService extends Service implements ICallbackPositionListene
             }
 
             public void onFinish() {
-                httpPOSTHelper = new HttpPOSTHelper();
-                httpPOSTHelper.setCallback(positionService);
+                httpSubscriptionHelper = new HttpSubscriptionHelper();
+                httpSubscriptionHelper.setCallback(positionService);
 
                 String url = "http://kerbtech.diphda.uberspace.de/art/location";
                 JSONObject obj = new JSONObject();
@@ -122,7 +122,7 @@ public class PositionService extends Service implements ICallbackPositionListene
                         e.printStackTrace();
                     }
                     //Log.i("Position-Service", "JSON-Obj: " + obj.toString());
-                    httpPOSTHelper.execute(url, obj.toString(), "location");
+                    httpSubscriptionHelper.execute(url, obj.toString(), "location");
                 } else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.posservice_toast_no_location), Toast.LENGTH_LONG).show();
                 }

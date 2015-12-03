@@ -36,8 +36,8 @@ import java.net.URLEncoder;
 import at.fhj.mad.art.R;
 import at.fhj.mad.art.gcm.QuickstartPreferences;
 import at.fhj.mad.art.gcm.RegistrationIntentService;
-import at.fhj.mad.art.helper.HttpGETHelper;
-import at.fhj.mad.art.helper.HttpPOSTHelper;
+import at.fhj.mad.art.helper.HttpStatusHelper;
+import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.interfaces.ICallbackHttpGETHelper;
 import at.fhj.mad.art.interfaces.ICallbackHttpPOSTHelper;
 import at.fhj.mad.art.services.PositionService;
@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
     private EditText input;
     private SharedPreferences prefs;
     private Context context;
-    private HttpPOSTHelper httpPOSTHelper;
+    private HttpSubscriptionHelper httpSubscriptionHelper;
     private Context activityContext;
     private Switch sw_active;
     private SharedPreferences.Editor editor;
@@ -249,8 +249,8 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
      */
     private void call_subscribe() throws JSONException, UnsupportedEncodingException {
         // Reinitialize the URL Connection every time the switch button has changed
-        httpPOSTHelper = new HttpPOSTHelper();
-        httpPOSTHelper.setCallback(this);
+        httpSubscriptionHelper = new HttpSubscriptionHelper();
+        httpSubscriptionHelper.setCallback(this);
 
         String url = "http://kerbtech.diphda.uberspace.de/art/subscribe";
         JSONObject obj = new JSONObject();
@@ -259,7 +259,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             obj.put("user", URLEncoder.encode(prefs.getString("username", ""), "UTF-8"));
             if (!(prefs.getString("token", "").equals(""))) {
                 obj.put("token", URLEncoder.encode(prefs.getString("token", ""), "UTF-8"));
-                httpPOSTHelper.execute(url, obj.toString(), "subscribe");
+                httpSubscriptionHelper.execute(url, obj.toString(), "subscribe");
             } else {
                 sw_active.setChecked(false);
                 Toast.makeText(activityContext, getResources().getString(R.string.main_toast_gcm_failure), Toast.LENGTH_LONG).show();
@@ -279,15 +279,15 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
      */
     private void call_unsubscribe() throws JSONException, UnsupportedEncodingException {
         // Reinitialize the URL Connection every time the switch button has changed
-        httpPOSTHelper = new HttpPOSTHelper();
-        httpPOSTHelper.setCallback(this);
+        httpSubscriptionHelper = new HttpSubscriptionHelper();
+        httpSubscriptionHelper.setCallback(this);
 
         String url = "http://kerbtech.diphda.uberspace.de/art/unsubscribe";
         JSONObject obj = new JSONObject();
 
         if (!(prefs.getString("username", "").equals(""))) {
             obj.put("user", URLEncoder.encode(prefs.getString("username", ""), "UTF-8"));
-            httpPOSTHelper.execute(url, obj.toString(), "unsubscribe");
+            httpSubscriptionHelper.execute(url, obj.toString(), "unsubscribe");
         } else {
             //sw_active.setChecked(true);
             Toast.makeText(activityContext, getResources().getString(R.string.main_toast_no_username), Toast.LENGTH_LONG).show();
@@ -298,11 +298,11 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
      * Calls the helper method to check the current server status
      */
     private void updateServerStatus() {
-        HttpGETHelper httpGETHelper = new HttpGETHelper();
-        httpGETHelper.setCallbackHttpHelper(this);
+        HttpStatusHelper httpStatusHelper = new HttpStatusHelper();
+        httpStatusHelper.setCallbackHttpHelper(this);
 
         String url = "http://kerbtech.diphda.uberspace.de/art/";
-        httpGETHelper.execute(url);
+        httpStatusHelper.execute(url);
     }
 
     /**

@@ -65,6 +65,7 @@ Otherwise copy everything from the 'webserver' folder to your desired webserver 
 
 Start Server with './bin/pushserver.js'
 
+
 NOTE AGAIN THAT THE WEBSERVER URL IS HARD CODED IN THE ANDROID PROJECT
 
 </div>

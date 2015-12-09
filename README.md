@@ -39,36 +39,28 @@ Project 'ART' was built during an bachelor degree course called "Mobile App Deve
 
 ### Android
 
-<div style="text-align:center">
 Use the APK in the 'android/APK' folder to install the app
 
 or
 
 Clone the whole project into Android Studio and deploy it from there.
-</div>
-
 
 * Requirements: Android 4.1+ (API Level 16)
 * IMPORTANT: The Webserver-URL is actually hard coded written in the project. If you use your own Webserver instead of the default one (http://kerbtech.diphda.uberspace.de/art/) please change this in the project. 
 
 ### Webserver
-<div style="text-align:center">
+
 Use the default webserver (http://kerbtech.diphda.uberspace.de/art/)
-</div>
 
 * Usernmae: moappdev
 
 * Password: leitstellenfruechtchen
 
-<div style="text-align:center">
 Otherwise copy everything from the 'webserver' folder to your desired webserver direction.
 
 Start Server with './bin/pushserver.js'
 
-
 NOTE AGAIN THAT THE WEBSERVER URL IS HARD CODED IN THE ANDROID PROJECT
-
-</div>
 
 * Requirements: NodeJS, MongoDB
 

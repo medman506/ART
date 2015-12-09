@@ -5,11 +5,11 @@
 
 Lets just assume that you are in need of medical help. You will call 144, right? 
 
-But unfortunatelly the next emergency team is not nearby you and it can take up to half an hour till someone else can help you.
+It seems like the next emergency team takes for ages to reach you. It may be caused because not every member of the team has a pager. 
 
-This is still a major problem in our actual emergency call chain, especially in less populated areas.
+This is still a major problem in our actual emergency call chain, especially in smaller emergency stations.
 
-Due to this problem, we have created an app which allows all medical educated staff to be notified if someone needs help nearby.
+Due to this problem, we have created an app which allows all medical educated staff to be notified if there are new missions.
 
 ## How does this work?
 

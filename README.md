@@ -24,7 +24,7 @@ Actual informations are:
 * What is the main problem?
 * Where is the place? (link to Google Maps)
 
-PICTURE OF TASK
+<img src="http://bamb.at/Screenshot_2015-12-09-11-57-09.png" width="35%">
 
 ## Why has this project been made?
 
@@ -66,6 +66,8 @@ NOTE AGAIN THAT THE WEBSERVER URL IS HARD CODED IN THE ANDROID PROJECT
 
 * Use this repo to initialize MongoDB for the GCM Push Server:
   * https://github.com/Smile-SA/node-pushserver
+
+<img src="http://i.pfiff.me/2015-12-09_20-27-04.png">
 
 ## Repository Visualization
 In case you want to get a visual overview of the repository take a look at the video below.

@@ -1,9 +1,9 @@
-![art-icon](http://bamb.at/hdpi.png) ART - Alert Response Teams
+![art-icon](http://bamb.at/hdpi.png) ART - Alert Response Teams Redone - ReImplemented
 ======
 
 ## What is this project about?
 
-Lets just assume that you are in need of medical help. You will call 144, right? 
+Lets just assume that you are in need of medical help. You will call 144, 112 or 911, right? 
 
 It seems like the next emergency team takes for ages to reach you. It may be caused because not every member of the team has a pager. 
 
@@ -13,22 +13,19 @@ Due to this problem, we have created an app which allows all medical educated st
 
 ## How does this work?
 
-Each medically educated staff should download and install this app on his/her android device, register with a relative unique name and set their actual status to online. 
-
-After that the App sends the actual position of this staff (if the person is in an active status) to an management server periodically where a dispatcher can see your position on a map. 
-
-After this dispatcher gets a call he can send you a push notification with the most important informations about the actual incident.
+Personnel can log into this app and will be alerted of new missions via PUSH NOTIFICATIONS.
+The dispatcher can use a web interface to send notifications to whole teams.
 
 Actual informations are:
 
 * What is the main problem?
 * Where is the place? (link to Google Maps)
 
-<img src="http://bamb.at/Screenshot_2015-12-09-11-57-09.png" width="35%">
-
 ## Why has this project been made?
 
 Project 'ART' was built during an bachelor degree course called "Mobile App Development" in the bachelor course 'ITM13'.
+
+This is a Fork of this Project which is implemented as part of a Bachelors Thesis. Based on the research of the thesis, this project is rewritten to suite the needs of actual users even better. 
 
 ## General structure
 
@@ -50,26 +47,17 @@ Clone the whole project into Android Studio and deploy it from there.
 
 ### Webserver
 
-Use the default webserver (http://kerbtech.diphda.uberspace.de/art/)
+* The Webserver is based on the Node Pushserver from Smile SA, which is licensed under the MIT License. 
+  * https://github.com/Smile-SA/node-pushserver
+* It is altered to fit the needs of the current application
 
-* Usernmae: moappdev
+The Webserver offers a basic protection. 
 
-* Password: leitstellenfruechtchen
 
-Otherwise copy everything from the 'webserver' folder to your desired webserver direction.
+To use the server, copy everything from the 'webserver' folder to your desired webserver direction.
 
 Start Server with './bin/pushserver.js'
 
 NOTE AGAIN THAT THE WEBSERVER URL IS HARD CODED IN THE ANDROID PROJECT
 
 * Requirements: NodeJS, MongoDB
-
-* Use this repo to initialize MongoDB for the GCM Push Server:
-  * https://github.com/Smile-SA/node-pushserver
-
-<img src="http://i.pfiff.me/2015-12-09_20-27-04.png">
-
-## Repository Visualization
-In case you want to get a visual overview of the repository take a look at the video below.
-
-[![Alt video player](http://bamb.at/player.png)](http://bamb.at/art_visualization.webm)

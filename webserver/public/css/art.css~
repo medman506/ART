@@ -13,7 +13,7 @@ html, body {
 .mdl-cell {
     height: 100%;
 }
-.mdl-cell--5-col {
+.mdl-cell--3-col {
     padding-bottom: 16px;
 }
 

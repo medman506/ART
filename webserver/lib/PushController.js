@@ -1,17 +1,12 @@
-/**
- * Created with JetBrains WebStorm.
- * User: Vincent Lemeunier
- * Date: 06/06/13
- * Time: 15:41
- */
+/* mit licenses*/
 
 var _ = require('lodash'),
-    pushAssociations = require('./PushAssociations'),
+    users = require('./model/Users'),
     gcmPusher = require('./GCMPusher');
 
 
-var send = function (pushAssociations, androidPayload) {
-    var androidTokens = _(pushAssociations).map('token').value();
+var send = function (users, androidPayload) {
+    var androidTokens = _(users).map('token').value();
     if (androidPayload && androidTokens.length > 0) {
         var gcmPayload = gcmPusher.buildPayload(androidPayload);
         console.log("PushController.js-line 17 - gcmPayload: " + JSON.stringify(gcmPayload));
@@ -20,29 +15,29 @@ var send = function (pushAssociations, androidPayload) {
 
 };
 
-var sendUsers = function (users, payload) {
-    pushAssociations.getForUsers(users, function (err, pushAss) {
+var sendTeams = function (teams, payload) {
+    users.getTokenForTeams(teams, function (err, foundUsers) {
         if (err) return;
-        send(pushAss, payload);
+        send(foundUsers, payload);
     });
 };
 
 var subscribe = function (deviceInfo) {
-	console.log("\nSUBSCRIPTION: "+decodeURIComponent(deviceInfo.token)); 
-    pushAssociations.add(deviceInfo.user, decodeURIComponent(deviceInfo.token));
+	console.log("\nSUBSCRIPTION: "+decodeURIComponent(deviceInfo.token));
+	users.setTokenForUser(deviceInfo.user, decodeURIComponent(deviceInfo.token)) 
 };
 
 var unsubscribeDevice = function (deviceToken) {
-    pushAssociations.removeDevice(deviceToken);
+    users.removeDevice(deviceToken);
 };
 
-var unsubscribeUser = function (user) {
-    pushAssociations.removeForUser(user);
+var unsubscribeUser = function (userID) {
+    users.setTokenForUser(userID,null);
 };
 
 module.exports = {
     send: send,
-    sendUsers: sendUsers,
+    sendTeams: sendTeams,
     subscribe: subscribe,
     unsubscribeDevice: unsubscribeDevice,
     unsubscribeUser: unsubscribeUser

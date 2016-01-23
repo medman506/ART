@@ -9,7 +9,7 @@
 var config = require('./Config')
 var _ = require('lodash');
 var gcm = require('node-gcm');
-var pushAssociations = require('./PushAssociations');
+var users = require('./model/Users');
 var apikey = "AIzaSyCNTPu0BUd-jLiBuNtT8VvWkebycX5yUM0"
 
 
@@ -22,13 +22,13 @@ var push = function (tokens, message) {
         if(err) console.log(err);
         else console.log(res);
 
-       /* if (res) {
+        if (res) {
             var mappedResults = _.map(_.zip(tokens, res.results), function (arr) {
                 return _.merge({token: arr[0]}, arr[1]);
             });
 
             handleResults(mappedResults);
-        } */
+        }
     })
 };
 
@@ -45,8 +45,8 @@ var handleResults = function (results) {
         }
     });
 
-    if (idsToUpdate.length > 0) pushAssociations.updateTokens(idsToUpdate);
-    if (idsToDelete.length > 0) pushAssociations.removeDevices(idsToDelete);
+    if (idsToUpdate.length > 0) users.updateTokens(idsToUpdate);
+    if (idsToDelete.length > 0) users.removeDevices(idsToDelete);
 };
 
 var buildPayload = function (options) {

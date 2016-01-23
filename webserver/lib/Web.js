@@ -2,7 +2,7 @@ var config = require('./Config');
 var express = require('express');
 var basicAuth = require('basic-auth');
 var _ = require('lodash');
-var pushAssociations = require('./PushAssociations');
+var users = require('./model/Users');
 var push = require('./PushController');
 
 var app = express();
@@ -77,16 +77,33 @@ app.post('/send', function (req, res) {
     res.status(notificationsValid ? 200 : 400).send();
 });
 
-app.post('/sendBatch', function (req, res) {
+app.post('/users/add', function (req, res) {
+    var user = req.body;
+    console.log(user);
+    users.add(user.id, user.user, user.pass);
+    //push.subscribe(deviceInfo);
+    
+    res.send(200);
+});
+
+app.put('/users/:user/team', function (req, res) {
+    var id=req.params.user;
+    var team= req.body.team;
+    console.log(id);
+    users.setTeamForUser(id,team);
+    res.send(200);
+});
+
+/*app.post('/sendBatch', function (req, res) {
     var notifs = req.body.notifications;
 
     var notificationsValid = sendNotifications(notifs);
 
     res.status(notificationsValid ? 200 : 400).send();
-});
+});*/
 
 // Utils API
-app.get('/users/:user/associations', function (req, res) {
+/*app.get('/users/:user/associations', function (req, res) {
     pushAssociations.getForUser(req.params.user, function (err, items) {
         if (!err) {
             res.send({"associations": items});
@@ -94,18 +111,13 @@ app.get('/users/:user/associations', function (req, res) {
             res.status(503).send();
         }
     });
-});
+});*/
 
 app.get('/users', function (req, res) {
-    pushAssociations.getAll(function (err, pushAss) {
+    console.log("get users");
+    users.getAll(function (err, pushAss) {
         if (!err) {
         	console.log("USERS: "+JSON.stringify(pushAss));  
-
-
-	 /*var users = _(pushAss).map('user').unique().value();
-            var deviceToken = _(pushAss).map('token').unique().value();
-	    var long = _(pushAss).map('longitude').unique().value();
-	    var lat = _(pushAss).map('latitude').unique().value();*/
             res.status(200).send(
                JSON.stringify(pushAss,null,"\t")
            );
@@ -115,18 +127,21 @@ app.get('/users', function (req, res) {
     });
 });
 
-app.post('/location',function(req,res){
-    console.log("Loc1\n");
-    var update = {
-	'user': req.body.user,
-	'longitude': parseFloat(req.body.longitude),
-	'latitude': parseFloat(req.body.latitude)
-    	};
-    
-    console.log("Body:\n"+JSON.stringify(update)+"\n");
-    pushAssociations.updateLoc(update);
-    res.send(200);
+app.get('/teams', function (req, res) {
+    console.log("get teams");
+    users.getAllTeams(function (err, teams) {
+        if (!err) {
+        	console.log("Teams: "+JSON.stringify(teams));  
+            res.status(200).send(
+               JSON.stringify(teams,null,"\t")
+           );
+        } else {
+            res.send(503)
+        }
+    });
 });
+
+
 
 app.delete('/users/:user', function (req, res) {
     pushController.unsubscribeUser(req.params.user);
@@ -142,20 +157,10 @@ app.use('/', express.static(__dirname + '/../public'));
 function sendNotifications(notifs) {
 
     notifs.forEach(function (notif) {
-        var users = notif.users,
+        var teams = notif.teams,
             androidPayload = notif.data;
-  
 
-        var fetchUsers = users ? pushAssociations.getForUsers : pushAssociations.getAll,
-            callback = function (err, pushAssociations) {
-                if (err) return;
-                console.log('Web.js-line 137: ' + JSON.stringify(pushAssociations) + ' ; ' + JSON.stringify(androidPayload));
-                push.send(pushAssociations, androidPayload);
-            },
-            args = users ? [users, callback] : [callback];
-
-        // TODO: optim. -> mutualise user fetching ?
-        fetchUsers.apply(null, args);
+	push.sendTeams(teams,androidPayload);
     });
 
     return true;

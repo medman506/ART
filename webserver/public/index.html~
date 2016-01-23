@@ -221,7 +221,7 @@
                 console.log('test.html-line 180: ' + JSON.stringify(pushNotification));
 
                 $.ajax({
-                    url: window.location.href+'send',
+                    url: 'http://kerbtech.diphda.uberspace.de/art/send',
                     type: 'POST',
                     data: JSON.stringify(pushNotification),
                     contentType: 'application/json',

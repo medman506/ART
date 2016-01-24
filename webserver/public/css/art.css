@@ -2,6 +2,9 @@ html, body {
     height: 82.5%;
 }
 
+.mdl-layout__header {
+    background-color: #990000;
+}
 .mdl-layout__content {
     height: 82.5%;
 }
@@ -21,13 +24,13 @@ html, body {
 .alert-card-wide > .mdl-card__title {
     color: #fff;
     height: 76px;
-    background-color: rgb(121,85,72);
+    background-color: #990000;
 }
 
 .aup-card-wide > .mdl-card__title {
     color: #fff;
     height: 76px;
-    background-color: rgb(121,85,72);
+    background-color: #990000;
 }
 
 
@@ -38,16 +41,8 @@ html, body {
     min-height: 150px;
     
 }
-.about-table, .aup-table {
+ .aup-table {
     width: 100%;
-}
-
-.about.table {
-    margin-bottom: 20px;
-}
-
-.about-table > thead {
-    background-color: rgba(121,85,72,0.85);
 }
 
 .alert-card-wide {

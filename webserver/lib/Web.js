@@ -52,8 +52,10 @@ app.post('/login', function (req, res) {
     var userInfo = req.body;
      users.authenticate(userInfo, function (retID) {
        
-       console.log("Login ID: "+retID);  
-       res.status(200).send(retID);
+       console.log("LoginID: "+retID.toString());
+       res.set('Content-Type', 'text/plain');
+       res.set('Content-Length', retID.toString.length);
+       res.send(retID.toString());
     });
     
    
@@ -81,11 +83,12 @@ app.post('/unsubscribe', function (req, res) {
 });
 
 app.post('/send', function (req, res) {
+    console.log("Received Notification");
     var notifs = [req.body];
+    console.log(notifs);
 
-    var notificationsValid = sendNotifications(notifs);
-
-    res.status(notificationsValid ? 200 : 400).send();
+   var notificationsValid = sendNotifications(notifs);
+   res.status(notificationsValid ? 200 : 400).send();
 });
 
 app.post('/users/add', function (req, res) {
@@ -168,9 +171,10 @@ app.use('/', express.static(__dirname + '/../public'));
 function sendNotifications(notifs) {
 
     notifs.forEach(function (notif) {
-        var teams = notif.teams,
+        var teams = notif.users,
             androidPayload = notif.data;
 
+	console.log("Teams:"+teams);
 	push.sendTeams(teams,androidPayload);
     });
 

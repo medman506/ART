@@ -10,6 +10,7 @@ var _ = require('lodash'),
 
 
 var send = function (users, androidPayload) {
+    console.log("USERS: "+JSON.stringify(users));
     var androidTokens = _(users).map('token').value();
     if (androidPayload && androidTokens.length > 0) {
         var gcmPayload = gcmPusher.buildPayload(androidPayload);
@@ -20,6 +21,7 @@ var send = function (users, androidPayload) {
 };
 
 var sendTeams = function (teams, payload) {
+    console.log(teams);
     users.getTokenForTeams(teams, function (err, foundUsers) {
         if (err) return;
         send(foundUsers, payload);

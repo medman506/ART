@@ -15,7 +15,6 @@ var push = function (tokens, message) {
     var sender = new gcm.Sender(apikey);
     console.log("tokens: "+tokens +"\n");
         
-    console.log("regIDS: "+regIds +"\n");
     sender.send(message, { registrationTokens: tokens }, 4, function (err, res) {
         if(err) console.log(err);
         else console.log(res);
@@ -52,11 +51,11 @@ var buildPayload = function (options) {
     message.addData(options);
     
     //maybe missing notification?
-    message.addNotification({
+    /*message.addNotification({
 	title: 'Alert!!!',
   	body: 'TEST TEST TEST',
   	icon: 'ic_launcher'
-    });
+    });*/
     console.log('GCMPusher.js-line 47: ' + JSON.stringify(message));
     return message;
 };

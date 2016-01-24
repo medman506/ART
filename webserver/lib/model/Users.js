@@ -82,28 +82,20 @@ var getAllActiveTeams = function (callback) {
     var wrappedCallback = outputFilterWrapper(callback, 'team');
 
     User.distinct('team').and([{ team: { $ne: null } }, {token: { $ne: null}}]).exec(wrappedCallback);
-    //User.find().and({ token: { $ne: null } },{ team: { $ne: null } },wrappedCallback);
-    
-//User.distinct('team', wrappedCallback);
-
-    
+      
 };
 
 
 var updateTokens = function (fromToArray) {
-    fromToArray.forEach(function (tokenUpdate) {
+    
+
+fromToArray.forEach(function (tokenUpdate) {
         User.findOneAndUpdate({token: tokenUpdate.from}, {token: tokenUpdate.to}, function (err) {
             if (err) console.error(err);
         });
     });
 };
 
-//find tokens for a team
-/*
-var getTokensForTeam = function (team, callback){
-	var wrappedCallback = outputFilterWrapper(callback,'token');	
-	User.find({'team':team},wrappedCallback);
-}*/
 
 
 var getPassForUser = function (username, callback) {
@@ -128,7 +120,7 @@ var removeDevice = function (token) {
 };
 
 var removeDevices = function (tokens) {
-	    
+	  
 	Users.update({token: {$in: tokens}},{token: null}, function (err) {
         if (err) console.log(err);
     });
@@ -205,5 +197,6 @@ module.exports = initWrapper({
     authenticate: authenticate,
     getAll: getAll,
     getAllActiveTeams: getAllActiveTeams,
-    updateTokens: updateTokens
+    updateTokens: updateTokens,
+    removeDevices: removeDevices
 });

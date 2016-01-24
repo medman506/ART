@@ -49,12 +49,14 @@
                                         <label class="control-label" for="androidOptions">Art:</label>
                                         <div class="controls">
                                             <select id="message" name="message" size="5">
-                                                <option>Intern_Still</option>
-                                                <option>Intern_Herz</option>
-                                                <option>Intern_Atem</option>
-                                                <option>Chir_Trauma</option>
-                                                <option>Chir_Blutung</option>
-                                                <option>Verkehr_Strasse</option>
+                                                <option>2_Intern_Still</option>
+						<option>2_Intern_Herz_NA</option>
+                                                <option>4_Intern_Herz</option>
+                                                <option>4_Intern_Atem</option>
+                                                <option>4_Chir_Trauma</option>
+                                                <option>4_Chir_Blutung</option>
+                                                <option>6_Verkehr_Strasse_Leicht</option>
+						<option>9_Zechen_anghaut</option>
                                             </select>
                                         </div>
                                     </div>
@@ -124,37 +126,13 @@
 
     <script>
         (function () {
-            // Init code mirror
-            $('.json-textarea').each(function () {
-                $(this).attr('autocapitalize', 'off')
-                    .attr('autocorrect', 'off')
-                    .attr('required', true);
-
-                var editor = CodeMirror.fromTextArea(this, {
-                    lineNumbers: true,
-                    matchBrackets: true,
-                    extraKeys: {
-                        "Enter": "newlineAndIndentContinueComment"
-                    },
-                    mode: {
-                        name: "javascript",
-                        json: true
-                    },
-                    theme: 'elegant'
-                });
-                editor.setSize('100%', '150px');
-                $(this).parent().siblings('label').click(function () {
-                    editor.focus();
-                });
-            });
-
             // Init select2
             $("#users").select2({
                 tokenSeparators: [",", " "],
-                placeholder: "(Optional, defaults to everyone)"
+                placeholder: ("Teams")
             });
 
-            toastr.options = { "positionClass": "toast-bottom-right" }
+            toastr.options = { "positionClass": "toast-top-right" }
                 // Init user list
 //http://kerbtech.diphda.uberspace.de/art/teams
             $.get(window.location.href+'teams', function (data) {
@@ -173,6 +151,17 @@
 
             // Bind form submit
             $('#pushForm').submit(function (event) {
+  		var sel = false;
+		$('#users option').each(function() {
+    			if(this.selected){
+				sel=true;
+			}
+		});
+		if(!sel){
+			toastr.warning('No team is selected!');
+			return false;		
+		}	
+
                 sendPush(formValues('#pushForm'));
                 return false;
             });

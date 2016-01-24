@@ -13,9 +13,6 @@ html, body {
 .mdl-cell {
     height: 100%;
 }
-.mdl-cell--5-col {
-    padding-bottom: 16px;
-}
 
 .mdl-card__supporting-text {
     width: auto;
@@ -27,11 +24,19 @@ html, body {
     background-color: rgb(121,85,72);
 }
 
+.aup-card-wide > .mdl-card__title {
+    color: #fff;
+    height: 76px;
+    background-color: rgb(121,85,72);
+}
+
+
 
 .aup-card-wide {
     width: auto;
     margin-bottom: 20px;
-    max-height: 70%;
+    min-height: 150px;
+    
 }
 .about-table, .aup-table {
     width: 100%;
@@ -47,12 +52,11 @@ html, body {
 
 .alert-card-wide {
     width: auto;
-    height: 50%;
+   
+    min-height: 150px;
 }
 
-.alert-card-wide > .mdl-card__supporting-text {
-    padding: 20px 16px 0 16px;
-}
+
 
 .well {
     background-color: transparent;

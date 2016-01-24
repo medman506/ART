@@ -26,9 +26,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -102,6 +105,7 @@ public class MyGcmListenerService extends GcmListenerService {
         PendingIntent pendingIntent = TaskStackBuilder.create(getApplicationContext())
                 .addNextIntentWithParentStack(intent).getPendingIntent((int) id, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
         // Building the Notification which  will be shown
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.launcher_icon))
@@ -118,7 +122,20 @@ public class MyGcmListenerService extends GcmListenerService {
         // Send Notification to screen
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        final AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        final int oldRing= am.getRingerMode();
+        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         notificationManager.notify((int) System.currentTimeMillis(), notificationBuilder.build());
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+               am.setRingerMode(oldRing);
+            }};
+
+        Handler mHandler = new Handler(Looper.getMainLooper());
+        mHandler.postDelayed(r, 10000);
+
 
     }
 }

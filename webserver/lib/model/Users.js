@@ -1,3 +1,9 @@
+/*
+ * node-pushserver
+ * Copyright(c) 2013 Smile SA <https://github.com/Smile-SA/node-pushserver>
+ * MIT Licensed
+ */
+
 var mongoose = require('mongoose');
 var config = require('.././Config');
 var _ = require('lodash');
@@ -7,7 +13,6 @@ var User;
 
 var initialize = _.once(function () {
     var db = mongoose.connect(config.get('mongodbUrl'));
-	console.log('PushAssoc-Line10: ' + config.get('mongodbUrl'));
     mongoose.connection.on('error', errorHandler);
 
     var usersSchema = new db.Schema({
@@ -27,9 +32,10 @@ var initialize = _.once(function () {
         }
     });
 
-    // I must ensure uniqueness of user
+    //There can be only one username
     usersSchema.index({ user: 1}, { unique: true });
 
+    //create model out of schema
     User = db.model('User', usersSchema);
 
     return module.exports;
@@ -70,26 +76,27 @@ var getAll = function (callback) {
 
     User.find(wrappedCallback);
 };
-var getAllTeams = function (callback) {
+
+var getAllActiveTeams = function (callback) {
     console.log("getting all temas");
     var wrappedCallback = outputFilterWrapper(callback, 'team');
 
-    User.distinct('team', wrappedCallback);
+    User.distinct('team').and([{ team: { $ne: null } }, {token: { $ne: null}}]).exec(wrappedCallback);
+    //User.find().and({ token: { $ne: null } },{ team: { $ne: null } },wrappedCallback);
+    
+//User.distinct('team', wrappedCallback);
 
-    /*User.distinct('team')
-	.where('team')
-	.ne(null)
-	.exec(wrappedCallback);*/
+    
 };
 
-/*
+
 var updateTokens = function (fromToArray) {
     fromToArray.forEach(function (tokenUpdate) {
-        PushAssociation.findOneAndUpdate({token: tokenUpdate.from}, {token: tokenUpdate.to}, function (err) {
+        User.findOneAndUpdate({token: tokenUpdate.from}, {token: tokenUpdate.to}, function (err) {
             if (err) console.error(err);
         });
     });
-};*/
+};
 
 //find tokens for a team
 /*
@@ -99,10 +106,10 @@ var getTokensForTeam = function (team, callback){
 }*/
 
 
-var getPassForUser = function (id, callback) {
+var getPassForUser = function (username, callback) {
     var wrappedCallback = outputFilterWrapper(callback,'pass');
 
-    User.find({_id: id}, wrappedCallback);
+    User.find({user: username}, wrappedCallback);
 };
 
 var getTokenForUser = function (id, callback) {
@@ -156,6 +163,22 @@ var outputFilterWrapper = function (callback, detail) {
     }
 };
 
+var authenticate = function (user, callback){
+	console.log(user);
+	getPassForUser(user.user, function (err, userIDs) {
+        	if (!err) {
+			if(userIDs.length ==0)
+				callback(0);
+			else if (user.pass == userIDs[0].pass)
+				callback(userIDs[0].id)
+			else
+				callback(0);	   
+        	} else {
+            		callback(0);
+        	}
+   	});	
+}
+
 var initWrapper = function (object) {
     return _.transform(object, function (newObject, func, funcName) {
         if(!_.isFunction(func)) return newObject[funcName] = func;
@@ -179,7 +202,8 @@ module.exports = initWrapper({
     setTokenForUser: setTokenForUser,
     setTeamForUser: setTeamForUser,
     getTokenForTeams: getTokenForTeams,
-    getPassForUser: getPassForUser,
+    authenticate: authenticate,
     getAll: getAll,
-    getAllTeams: getAllTeams
+    getAllActiveTeams: getAllActiveTeams,
+    updateTokens: updateTokens
 });

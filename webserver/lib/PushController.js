@@ -1,4 +1,8 @@
-/* mit licenses*/
+/*
+ * node-pushserver
+ * Copyright(c) 2013 Smile SA <https://github.com/Smile-SA/node-pushserver>
+ * MIT Licensed
+ */
 
 var _ = require('lodash'),
     users = require('./model/Users'),

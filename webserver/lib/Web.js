@@ -48,6 +48,17 @@ app.post('/*',function (req, res, next) {
 });
 
 // Main API
+app.post('/login', function (req, res) {
+    var userInfo = req.body;
+     users.authenticate(userInfo, function (retID) {
+       
+       console.log("Login ID: "+retID);  
+       res.status(200).send(retID);
+    });
+    
+   
+});
+
 app.post('/subscribe', function (req, res) {
     var deviceInfo = req.body;
     push.subscribe(deviceInfo);
@@ -129,7 +140,7 @@ app.get('/users', function (req, res) {
 
 app.get('/teams', function (req, res) {
     console.log("get teams");
-    users.getAllTeams(function (err, teams) {
+    users.getAllActiveTeams(function (err, teams) {
         if (!err) {
         	console.log("Teams: "+JSON.stringify(teams));  
             res.status(200).send(

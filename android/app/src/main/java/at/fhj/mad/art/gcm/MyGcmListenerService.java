@@ -60,24 +60,12 @@ public class MyGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
         // Only notify if active, and actual data was received
         SharedPreferences prefs = getSharedPreferences("Settings", 0);
         if (prefs.getBoolean("active", false) && data.getString("message", null) != null && data.getString("link", null) != null) {
             sendNotification(data, from);
         }
-        // [END_EXCLUDE]
+
     }
 
     /**

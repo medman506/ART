@@ -30,6 +30,7 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import at.fhj.mad.art.R;
+import at.fhj.mad.art.activities.ListActivity;
 
 /**
  * Handles Registration
@@ -38,6 +39,7 @@ public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
+    public static final String TOKEN ="token";
 
     public RegistrationIntentService() {
         super(TAG);
@@ -60,7 +62,7 @@ public class RegistrationIntentService extends IntentService {
             // [END get_token]
             Log.i(TAG, "GCM Registration Token: " + token);
 
-            sendRegistrationToServer(token);
+            saveRegistration(token);
 
             // Subscribe to topic channels
             subscribeTopics(token);
@@ -82,18 +84,16 @@ public class RegistrationIntentService extends IntentService {
     }
 
     /**
-     * Persist registration to third-party servers.
+     * Persist registration to shared prefs
      * <p/>
-     * Modify this method to associate the user's GCM registration token with any server-side account
-     * maintained by your application.
+     * Saves the token into shared prefs for later use.
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    private void saveRegistration(String token) {
         // Safe received token to SharedPreferences
 
-        String SETTINGS = "Settings";
-        SharedPreferences prefs = getSharedPreferences(SETTINGS, 0);
+        SharedPreferences prefs = getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("token", token);
         editor.apply();

@@ -57,17 +57,25 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     //Helper class for db access
     private SQLiteHelper sqLiteHelper;
 
+
+    //SHAREDPREFS String
+    public static final String SHARED_PREFS_SETTINGS = "ART_Settings";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        SharedPreferences prefs = getSharedPreferences(SettingsActivity.SHARED_PREFS_SETTINGS, 0);
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
 
-        // Redirect to settings screen if none is "logged in"
-        if (prefs.getString("username", "").isEmpty()) {
-            Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivity(settingsIntent);
+        // Redirect to login screen screen if none is "logged in"
+        if (prefs.getInt("userID", 0)==0) {
+            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(loginIntent);
             finish();
         }
+
+        //TODO check if gcm token
+
+        //if not, optain and send to server
 
         super.onCreate(savedInstanceState);
         // Associate with layout

@@ -30,7 +30,11 @@ public class UpdateHelper extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent intent) {
         // assuming data is available in the delivered intent
-        Log.i("UPDATE", "BroadCast Received");
-        myUpdateListener.handleListUpdate();
+
+        //Handle only if correct action is set
+        if(intent.getAction().equals(UPDATE_STRING)) {
+            Log.i("UPDATE", "BroadCast Received");
+            myUpdateListener.handleListUpdate();
+        }
     }
 }

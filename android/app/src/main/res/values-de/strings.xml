@@ -40,4 +40,5 @@
     <string name="dialog_no_gps">Bitte aktivieren sie ihr GPS mit hoher Genauigkeit!</string>
     <string name="posservice_toast_no_location">Deine Position kann nicht erfasst werden!</string>
     <string name="list_toast_task_deleted">Auftrag gelöscht</string>
+    <string name="prompt_password">Passwort</string>
 </resources>

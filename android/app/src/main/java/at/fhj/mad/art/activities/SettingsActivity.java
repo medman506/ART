@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -40,7 +39,6 @@ import at.fhj.mad.art.helper.HttpStatusHelper;
 import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.interfaces.ICallbackHttpGETHelper;
 import at.fhj.mad.art.interfaces.ICallbackHttpPOSTHelper;
-import at.fhj.mad.art.services.PositionService;
 
 /**
  * Show SettingsActivity where the User can change his Username
@@ -144,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         updateServerStatus();
 
         // Periodically check if Server is reachable or not
-        isRunning = true;
+      /*  isRunning = true;
 
         cdt = new CountDownTimer(10000, 1000) {
 
@@ -162,7 +160,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         };
 
         cdt.start();
-
+        */
         input = (EditText) findViewById(R.id.settings_et_username);
         Button btn_save = (Button) findViewById(R.id.settings_btn_save);
         context = getApplicationContext();
@@ -305,26 +303,7 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         httpStatusHelper.execute(url);
     }
 
-    /**
-     * Starts the location service
-     * Messenger is passed through the Intent to communicate with the handler
-     */
-    private void startLocationService() {
-        Intent i = new Intent(this, PositionService.class);
-        Log.i("StartLocationService", "Triggered");
-        Messenger messenger = new Messenger(handler);
-        i.putExtra("messenger", messenger);
-        startService(i);
-    }
 
-    /**
-     * Stops the location service
-     */
-    private void stopLocationService() {
-        Intent i = new Intent(this, PositionService.class);
-        Log.i("StopLocationService", "Triggered");
-        stopService(i);
-    }
 
     /**
      * Checks if given Service-Class is already a running Service or not.
@@ -373,7 +352,6 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             Toast.makeText(activityContext, getResources().getString(R.string.main_toast_activated), Toast.LENGTH_SHORT).show();
             editor.putBoolean("active", true);
             editor.apply();
-            startLocationService();
             // User shouldn't be able to change username if he's successfully subscribed
             input.setFocusable(false);
             input.setFocusableInTouchMode(false);
@@ -390,7 +368,6 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
             Toast.makeText(activityContext, getResources().getString(R.string.main_toast_deactivated), Toast.LENGTH_SHORT).show();
             editor.putBoolean("active", false);
             editor.apply();
-            stopLocationService();
             // User should be able to change username after he successfully unsubscribed
             input.setFocusable(true);
             input.setFocusableInTouchMode(true);
@@ -415,15 +392,9 @@ public class SettingsActivity extends AppCompatActivity implements ICallbackHttp
         editor.putBoolean("serverstatus", status);
         editor.apply();
         if (prefs.getBoolean("serverstatus", false)) {
-            if (!(isMyServiceRunning(PositionService.class)) && prefs.getBoolean("active", false)) {
-                startLocationService();
-            }
             server_status.setText(getResources().getString(R.string.main_tf_server_active));
             server_status.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
         } else {
-            if (isMyServiceRunning(PositionService.class)) {
-                stopLocationService();
-            }
             server_status.setText(getResources().getString(R.string.main_tf_server_inactive));
             server_status.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
         }

@@ -40,4 +40,14 @@
     <string name="dialog_no_gps">Please activate your GPS!</string>
     <string name="posservice_toast_no_location">Couldn\'t track your position!</string>
     <string name="list_toast_task_deleted">Task deleted</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="error_invalid_email">This username address is invalid</string>
+    <string name="error_invalid_password">This password is wrong</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
 </resources>

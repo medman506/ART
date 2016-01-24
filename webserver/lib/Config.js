@@ -1,9 +1,7 @@
-/**
- * Created with JetBrains WebStorm.
- * User: smile
- * Date: 17/06/13
- * Time: 12:03
- * To change this template use File | Settings | File Templates.
+/*
+ * node-pushserver
+ * Copyright(c) 2013 Smile SA <https://github.com/Smile-SA/node-pushserver>
+ * MIT Licensed
  */
 var _ = require('lodash');
 

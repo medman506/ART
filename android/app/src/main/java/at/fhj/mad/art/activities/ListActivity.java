@@ -38,7 +38,7 @@ import at.fhj.mad.art.model.Task;
 public class ListActivity extends AppCompatActivity implements ICallbackUpdateListener {
 
     //Strings for the Hamburger Menu
-    private String SETTINGS_STRING;
+    private String INFO_STRING;
     private String CONTACT_STRING;
     private String SERVER_UPDATE_STRING;
 
@@ -73,9 +73,6 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
             finish();
         }
 
-        //TODO check if gcm token
-
-        //if not, optain and send to server
 
         super.onCreate(savedInstanceState);
         // Associate with layout
@@ -84,7 +81,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         myUpdateHelper = new UpdateHelper(this);
 
         // Initiate Strings for Hamburger Menu
-        SETTINGS_STRING = getResources().getString(R.string.nav_settings);
+        INFO_STRING = getResources().getString(R.string.nav_info);
         CONTACT_STRING = getResources().getString(R.string.nav_contact);
         SERVER_UPDATE_STRING = getResources().getString(R.string.nav_server_update);
 
@@ -196,7 +193,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
      * actions of the Menu-Items.
      */
     private void addDrawerItems() {
-        String[] menuArray = {SETTINGS_STRING, CONTACT_STRING, SERVER_UPDATE_STRING};
+        String[] menuArray = {INFO_STRING, CONTACT_STRING, SERVER_UPDATE_STRING};
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -308,8 +305,8 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
      * @param item String name of the Activity
      */
     private void handleDrawerItem(String item) {
-        if (item.equals(SETTINGS_STRING)) {
-            Intent i = new Intent(this, SettingsActivity.class);
+        if (item.equals(INFO_STRING)) {
+            Intent i = new Intent(this, InfoActivity.class);
             startActivity(i);
         } else if (item.equals(CONTACT_STRING)) {
             Intent i = new Intent(this, ContactActivity.class);

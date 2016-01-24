@@ -3,10 +3,13 @@ package at.fhj.mad.art.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -35,6 +38,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import at.fhj.mad.art.R;
+import at.fhj.mad.art.gcm.QuickstartPreferences;
 import at.fhj.mad.art.gcm.RegistrationIntentService;
 import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.helper.LoginHelper;
@@ -58,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
     private View mProgressView;
     private View mLoginFormView;
 
-    private SharedPreferences prefs = getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
+    private SharedPreferences prefs;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private int userID;
@@ -68,7 +72,9 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("START","Strartiasdfhkj");
         setContentView(R.layout.activity_login);
+        prefs = getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
         // Set up the login form.
         mUsername = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -91,11 +97,28 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
             }
         });
 
+
+        new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    Toast.makeText(context, getResources().getString(R.string.main_toast_saved_token), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, getResources().getString(R.string.main_toast_not_saved_token), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        Log.i("TOKEN",prefs.getString(RegistrationIntentService.TOKEN,""));
         //check if token available
         if(prefs.getString(RegistrationIntentService.TOKEN,"").equals("")){
+            Log.i("LOGIN", "Need new token");
             //check play service and get token
             if (checkPlayServices()) {
                 // Start IntentService to register this application with GCM.
@@ -126,12 +149,13 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         // Store values at the time of the login attempt.
         String email = mUsername.getText().toString();
         String password = mPasswordView.getText().toString();
+        Log.i("PASSWORD",password);
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -174,7 +198,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         // Reinitialize the URL Connection every time the switch button has changed
 
         //TODO: Rewerite url
-        String url = "http://kerbtech.diphda.uberspace.de/art/login";
+        String url = "http://kerbtech.diphda.uberspace.de/art2/login";
         JSONObject obj = new JSONObject();
 
 
@@ -195,6 +219,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
      * the Google Play Store or enable it in the device's system settings.
      */
     private boolean checkPlayServices() {
+        Log.i("PLAY SERVICE","CHHECKING");
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -254,8 +279,8 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
 
 
 
-        if(success==null) {
-            //Do nothing
+        if(success.equals("-1")) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_connection), Toast.LENGTH_SHORT).show();
         }else if(success.equals("0")) {
 
             //callback failed
@@ -325,12 +350,12 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         httpSubscriptionHelper.setCallback(this);
 
         //TODO: Change URL
-        String url = "http://kerbtech.diphda.uberspace.de/art/subscribe";
+        String url = "http://kerbtech.diphda.uberspace.de/art2/subscribe";
         JSONObject obj = new JSONObject();
 
 
         obj.put("user", URLEncoder.encode(String.valueOf(id), "UTF-8"));
-        obj.put("token", URLEncoder.encode(prefs.getString("token", ""), "UTF-8"));
+        obj.put("token", URLEncoder.encode(prefs.getString(RegistrationIntentService.TOKEN, ""), "UTF-8"));
         httpSubscriptionHelper.execute(url, obj.toString(), "subscribe");
 
     }
@@ -342,6 +367,8 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         //write to shared prefs
         Editor editor = prefs.edit();
         editor.putInt("userID", userID);
+        editor.commit();
+        Log.i("USERID",String.valueOf(userID));
         //finish and start list activity
         Intent listIntent = new Intent(getApplicationContext(), ListActivity.class);
         startActivity(listIntent);

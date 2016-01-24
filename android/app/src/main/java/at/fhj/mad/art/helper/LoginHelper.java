@@ -101,6 +101,8 @@ public class LoginHelper extends AsyncTask<String, String, String>  {
 
         } catch (IOException e) {
             e.printStackTrace();
+            return "-1";
+
         } finally {
             // Close the UrlConnection after the Data has been saved
             if (urlConnection != null) {

@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -60,9 +61,9 @@ public class MyGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
-        // Only notify if active, and actual data was received
-        SharedPreferences prefs = getSharedPreferences("Settings", 0);
-        if (prefs.getBoolean("active", false) && data.getString("message", null) != null && data.getString("link", null) != null) {
+        Log.i("NOTIFICATION","NEW NOTIFICATION");
+        // Only notify if actual data was received
+        if (data.getString("message", null) != null && data.getString("link", null) != null) {
             sendNotification(data, from);
         }
 

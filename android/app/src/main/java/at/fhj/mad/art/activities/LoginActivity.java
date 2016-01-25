@@ -313,19 +313,6 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
             }
 
 
-
-
-            //write to shared pref
-
-
-
-
-
-
-            //start list activity
-
-
-
             finish();
         }
 

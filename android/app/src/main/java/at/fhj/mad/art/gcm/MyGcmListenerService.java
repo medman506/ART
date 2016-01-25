@@ -38,6 +38,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import at.fhj.mad.art.R;
+import at.fhj.mad.art.activities.ListActivity;
 import at.fhj.mad.art.activities.ListTaskActivity;
 import at.fhj.mad.art.helper.SQLiteHelper;
 import at.fhj.mad.art.helper.UpdateHelper;
@@ -64,9 +65,12 @@ public class MyGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
+        SharedPreferences prefs= getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS,0);
+
+
         Log.i("NOTIFICATION","NEW NOTIFICATION");
-        // Only notify if actual data was received
-        if (data.getString("message", null) != null && data.getString("link", null) != null) {
+        // Only notify if actual data was received and user is logged in
+        if (!(prefs.getInt("userID",-1) == -1) && data.getString("message", null) != null && data.getString("link", null) != null) {
             sendNotification(data, from);
         }
 

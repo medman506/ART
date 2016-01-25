@@ -30,7 +30,7 @@
     <string name="task_tf_where">Location</string>
     <string name="task_bt_dismiss">Dismiss</string>
     <string name="lineadapter_received_on">Received on: </string>
-    <string name="nav_server_update">Update Server-Status</string>
+    <string name="nav_logout">Logout</string>
     <string name="main_tf_server_active">up</string>
     <string name="main_tf_server_inactive"> down</string>
     <string name="main_tf_server_is">Server is</string>

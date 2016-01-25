@@ -40,7 +40,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     //Strings for the Hamburger Menu
     private String INFO_STRING;
     private String CONTACT_STRING;
-    private String SERVER_UPDATE_STRING;
+    private String LOGOUT_STRING;
 
     //Hamburger menu
     private ListView mDrawerList;
@@ -83,7 +83,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         // Initiate Strings for Hamburger Menu
         INFO_STRING = getResources().getString(R.string.nav_info);
         CONTACT_STRING = getResources().getString(R.string.nav_contact);
-        SERVER_UPDATE_STRING = getResources().getString(R.string.nav_server_update);
+        LOGOUT_STRING = getResources().getString(R.string.nav_logout);
 
         // Init Hamburger menu
         mDrawerList = (ListView) findViewById(R.id.settings_navList);
@@ -193,7 +193,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
      * actions of the Menu-Items.
      */
     private void addDrawerItems() {
-        String[] menuArray = {INFO_STRING, CONTACT_STRING, SERVER_UPDATE_STRING};
+        String[] menuArray = {INFO_STRING, CONTACT_STRING, LOGOUT_STRING};
         ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -311,6 +311,9 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         } else if (item.equals(CONTACT_STRING)) {
             Intent i = new Intent(this, ContactActivity.class);
             startActivity(i);
+        } else if (item.equals(LOGOUT_STRING)){
+            //DO LOGOUT
+            //Restart activity
         }
     }
 

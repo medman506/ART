@@ -82,6 +82,7 @@ app.post('/unsubscribe', function (req, res) {
     res.send(200);
 });
 
+
 app.post('/send', function (req, res) {
     console.log("Received Notification");
     var notifs = [req.body];
@@ -108,24 +109,16 @@ app.put('/users/:user/team', function (req, res) {
     res.send(200);
 });
 
-/*app.post('/sendBatch', function (req, res) {
-    var notifs = req.body.notifications;
 
-    var notificationsValid = sendNotifications(notifs);
+app.get('/users/:userID/team', function (req, res) {
+    	var id=req.params.userID;
+	users.getTeamForUser(id, function (team){
+		res.set('Content-Type', 'text/plain');
+       		res.set('Content-Length', team.length);
+       		res.status(200).send(team);
+	});   
+});
 
-    res.status(notificationsValid ? 200 : 400).send();
-});*/
-
-// Utils API
-/*app.get('/users/:user/associations', function (req, res) {
-    pushAssociations.getForUser(req.params.user, function (err, items) {
-        if (!err) {
-            res.send({"associations": items});
-        } else {
-            res.status(503).send();
-        }
-    });
-});*/
 
 app.get('/users', function (req, res) {
     console.log("get users");
@@ -153,13 +146,6 @@ app.get('/teams', function (req, res) {
             res.send(503)
         }
     });
-});
-
-
-
-app.delete('/users/:user', function (req, res) {
-    pushController.unsubscribeUser(req.params.user);
-    res.send('ok');
 });
 
 

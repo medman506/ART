@@ -49,16 +49,33 @@ var add = function (id, user, pass) {
 
 //sets a token for user: gets called from client app
 var setTokenForUser = function (id, token){
-	User.findOneAndUpdate({_id: id}, {token: token}, function (err) {
+	if(token==null){
+		User.findOneAndUpdate({_id: id}, {$unset: {token: "" }}, function (err) {
+              if (err) console.error(err);
+           });
+	}else{
+	   User.findOneAndUpdate({_id: id}, {token: token}, function (err) {
             if (err) console.error(err);
         });
+	}
 };
 
 //sets a token for user: gets called from client app
 var setTeamForUser = function (id, team){
 	User.findOneAndUpdate({_id: id}, {team: team}, function (err) {
-            if (err) console.error(err);
+           if (err) console.error(err);
         });
+	
+};
+
+//return team für user id
+var getTeamForUser = function (id,callback){
+	console.log("ID:"+id);
+	var wrappedCallback = outputFilterWrapper(callback,'team');
+	User.find({_id: id}, 'team', function(err, obj) {                      
+    		wrappedCallback(obj[0].team);
+	});
+	
 };
 
 //get tokens for all queried teams
@@ -88,8 +105,7 @@ var getAllActiveTeams = function (callback) {
 
 var updateTokens = function (fromToArray) {
     
-
-fromToArray.forEach(function (tokenUpdate) {
+	fromToArray.forEach(function (tokenUpdate) {
         User.findOneAndUpdate({token: tokenUpdate.from}, {token: tokenUpdate.to}, function (err) {
             if (err) console.error(err);
         });
@@ -140,8 +156,9 @@ var outputFilterWrapper = function (callback, detail) {
             		return _.pick(pushItem, ['id', 'token'])
         	});
 	}else if(detail === 'team'){
-		//Return user and token		
+		//Return team	
 		var items = _.map(pushItems, function (pushItem) {
+			console.log("IT: ", pushItem);
             		return pushItem;
         	});
 	}else{
@@ -193,6 +210,7 @@ module.exports = initWrapper({
     add: add,
     setTokenForUser: setTokenForUser,
     setTeamForUser: setTeamForUser,
+    getTeamForUser: getTeamForUser,
     getTokenForTeams: getTokenForTeams,
     authenticate: authenticate,
     getAll: getAll,

@@ -68,6 +68,16 @@ var setTeamForUser = function (id, team){
 	
 };
 
+//return team für user id
+var getTeamForUser = function (id,callback){
+	console.log("ID:"+id);
+	var wrappedCallback = outputFilterWrapper(callback,'team');
+	User.find({_id: id}, 'team', function(err, obj) {                      
+    		wrappedCallback(obj[0].team);
+	});
+	
+};
+
 //get tokens for all queried teams
 var getTokenForTeams = function (teams, callback) {
     var wrappedCallback = outputFilterWrapper(callback,'token');
@@ -95,8 +105,7 @@ var getAllActiveTeams = function (callback) {
 
 var updateTokens = function (fromToArray) {
     
-
-fromToArray.forEach(function (tokenUpdate) {
+	fromToArray.forEach(function (tokenUpdate) {
         User.findOneAndUpdate({token: tokenUpdate.from}, {token: tokenUpdate.to}, function (err) {
             if (err) console.error(err);
         });
@@ -147,8 +156,9 @@ var outputFilterWrapper = function (callback, detail) {
             		return _.pick(pushItem, ['id', 'token'])
         	});
 	}else if(detail === 'team'){
-		//Return user and token		
+		//Return team	
 		var items = _.map(pushItems, function (pushItem) {
+			console.log("IT: ", pushItem);
             		return pushItem;
         	});
 	}else{
@@ -200,6 +210,7 @@ module.exports = initWrapper({
     add: add,
     setTokenForUser: setTokenForUser,
     setTeamForUser: setTeamForUser,
+    getTeamForUser: getTeamForUser,
     getTokenForTeams: getTokenForTeams,
     authenticate: authenticate,
     getAll: getAll,

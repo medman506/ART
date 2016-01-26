@@ -12,7 +12,6 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +37,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import at.fhj.mad.art.R;
-import at.fhj.mad.art.gcm.QuickstartPreferences;
+import at.fhj.mad.art.helper.QuickstartPreferences;
 import at.fhj.mad.art.gcm.RegistrationIntentService;
 import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.helper.LoginHelper;
@@ -195,9 +194,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
      */
     private void callLogin(LoginHelper loginHelper)  {
         // Reinitialize the URL Connection every time the switch button has changed
-
-        //TODO: Rewerite url
-        String url = "http://kerbtech.diphda.uberspace.de/art2/login";
+        String url =QuickstartPreferences.WEB_ADRESS.concat(QuickstartPreferences.LOGIN);
         JSONObject obj = new JSONObject();
 
 
@@ -275,9 +272,6 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         loginHelper = null;
         showProgress(false);
 
-
-
-
         if(success.equals("-1")) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_connection), Toast.LENGTH_LONG).show();
         }else if(success.equals("0")) {
@@ -301,24 +295,13 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
                 //subscribe
 
                 try {
-                    call_subscribe(userID,token);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
+                    call_subscribe(userID);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             }
-
-
             finish();
         }
-
-
-
-
-
     }
 
 
@@ -330,13 +313,13 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
      * @throws JSONException                Thrown by JSONObject
      * @throws UnsupportedEncodingException Thrown by URLEncoder
      */
-    private void call_subscribe(int id, String token) throws JSONException, UnsupportedEncodingException {
+    private void call_subscribe(int id) throws JSONException, UnsupportedEncodingException {
 
         HttpSubscriptionHelper httpSubscriptionHelper= new HttpSubscriptionHelper();
         httpSubscriptionHelper.setCallback(this);
 
-        //TODO: Change URL
-        String url = "http://kerbtech.diphda.uberspace.de/art2/subscribe";
+
+        String url = QuickstartPreferences.WEB_ADRESS.concat(QuickstartPreferences.SUBSCRIBE);
         JSONObject obj = new JSONObject();
 
 
@@ -354,7 +337,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         Editor editor = prefs.edit();
         editor.putInt("userID", userID);
         editor.commit();
-        Log.i("USERID",String.valueOf(userID));
+        Log.i("USERID", String.valueOf(userID));
         //finish and start list activity
         Intent listIntent = new Intent(getApplicationContext(), ListActivity.class);
         startActivity(listIntent);

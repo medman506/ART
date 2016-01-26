@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package at.fhj.mad.art.gcm;
+package at.fhj.mad.art.helper;
 
 /**
  * Saves static strings used in gcm
@@ -23,5 +23,10 @@ public class QuickstartPreferences {
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
+
+    public static final String WEB_ADRESS = "http://kerbtech.diphda.uberspace.de/art2/";
+    public static final String LOGIN = "login";
+    public static final String SUBSCRIBE = "subscribe";
+
 
 }

@@ -49,16 +49,23 @@ var add = function (id, user, pass) {
 
 //sets a token for user: gets called from client app
 var setTokenForUser = function (id, token){
-	User.findOneAndUpdate({_id: id}, {token: token}, function (err) {
+	if(token==null){
+		User.findOneAndUpdate({_id: id}, {$unset: {token: "" }}, function (err) {
+              if (err) console.error(err);
+           });
+	}else{
+	   User.findOneAndUpdate({_id: id}, {token: token}, function (err) {
             if (err) console.error(err);
         });
+	}
 };
 
 //sets a token for user: gets called from client app
 var setTeamForUser = function (id, team){
 	User.findOneAndUpdate({_id: id}, {team: team}, function (err) {
-            if (err) console.error(err);
+           if (err) console.error(err);
         });
+	
 };
 
 //get tokens for all queried teams

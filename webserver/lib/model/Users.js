@@ -72,8 +72,12 @@ var setTeamForUser = function (id, team){
 var getTeamForUser = function (id,callback){
 	console.log("ID:"+id);
 	var wrappedCallback = outputFilterWrapper(callback,'team');
-	User.find({_id: id}, 'team', function(err, obj) {                      
-    		wrappedCallback(obj[0].team);
+	User.find({_id: id}, 'team', function(err, obj) {
+		console.log("if: ",obj[0].team !== undefined);
+		if(obj[0].team !== undefined)                      
+    			wrappedCallback(obj[0].team);
+		else
+			wrappedCallback([]);
 	});
 	
 };

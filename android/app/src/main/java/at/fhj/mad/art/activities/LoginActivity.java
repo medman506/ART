@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("START","Strartiasdfhkj");
         setContentView(R.layout.activity_login);
         prefs = getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
         // Set up the login form.
@@ -280,7 +279,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
 
 
         if(success.equals("-1")) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_connection), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_connection), Toast.LENGTH_LONG).show();
         }else if(success.equals("0")) {
 
             //callback failed
@@ -365,7 +364,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
     }
 
     @Override
-    public void finished_unsubscribe(String response) {
+    public void finished_unsubscribe() {
         //Not implemented
     }
 

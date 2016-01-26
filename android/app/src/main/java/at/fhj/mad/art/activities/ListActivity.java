@@ -20,14 +20,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import at.fhj.mad.art.R;
 import at.fhj.mad.art.adapters.TwoLineAdapter;
+import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.helper.SQLiteHelper;
 import at.fhj.mad.art.helper.SwipeDetector;
 import at.fhj.mad.art.helper.UpdateHelper;
+import at.fhj.mad.art.interfaces.ICallbackHttpPOSTHelper;
 import at.fhj.mad.art.interfaces.ICallbackUpdateListener;
 import at.fhj.mad.art.model.Task;
 
@@ -35,7 +42,7 @@ import at.fhj.mad.art.model.Task;
  * Activity to display all saved Tasks
  * Main Screen of app
  */
-public class ListActivity extends AppCompatActivity implements ICallbackUpdateListener {
+public class ListActivity extends AppCompatActivity implements ICallbackUpdateListener, ICallbackHttpPOSTHelper {
 
     //Strings for the Hamburger Menu
     private String INFO_STRING;
@@ -57,20 +64,18 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     //Helper class for db access
     private SQLiteHelper sqLiteHelper;
 
-
     //SHAREDPREFS String
     public static final String SHARED_PREFS_SETTINGS = "ART_Settings";
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
+        prefs = getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
 
         // Redirect to login screen screen if none is "logged in"
-        if (prefs.getInt("userID", 0)==0) {
-            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
+        if (prefs.getInt("userID", -1)==-1) {
+           callLoginScreen();
         }
 
 
@@ -312,8 +317,36 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
             Intent i = new Intent(this, ContactActivity.class);
             startActivity(i);
         } else if (item.equals(LOGOUT_STRING)){
-            //DO LOGOUT
-            //Restart activity
+            try {
+                call_unsubscribe();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Makes an HttpRequest to the server to unsubscribe from the service
+     * Throws a Toast if the Username is missing
+     *
+     * @throws JSONException                Thrown by JSONObject
+     * @throws UnsupportedEncodingException Thrown by URLEncoder
+     */
+    private void call_unsubscribe() throws JSONException, UnsupportedEncodingException {
+        // Reinitialize the URL Connection every time the switch button has changed
+        HttpSubscriptionHelper httpSubscriptionHelper = new HttpSubscriptionHelper();
+        httpSubscriptionHelper.setCallback(this);
+
+        String url = "http://kerbtech.diphda.uberspace.de/art2/unsubscribe";
+        JSONObject obj = new JSONObject();
+
+        if (prefs.getInt("userID",-1)>0) {
+            obj.put("user", URLEncoder.encode(String.valueOf(prefs.getInt("userID",-1)), "UTF-8"));
+            httpSubscriptionHelper.execute(url, obj.toString(), "unsubscribe");
+        } else {
+           callLoginScreen();
         }
     }
 
@@ -326,5 +359,34 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     @Override
     public void handleListUpdate() {
         resetList();
+    }
+
+    @Override
+    public void finished_subscribe(String response) {
+        //not implemented here
+    }
+
+    @Override
+    public void finished_unsubscribe() {
+        SharedPreferences.Editor editor = prefs.edit();
+        //remove userID from settings file
+        editor.remove("userID");
+        editor.apply();
+        //move to login screen
+        callLoginScreen();
+    }
+
+    @Override
+    public void finished_error() {
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.undefined_error), Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Opens Login Screen and finishes activity
+     */
+    private void callLoginScreen(){
+        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 }

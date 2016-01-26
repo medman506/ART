@@ -15,11 +15,11 @@ public interface ICallbackHttpPOSTHelper {
 
     /**
      * Called by HttpSubscriptionHelper after a unsubscribe-request has been send to the Server
-     * Manages the response form the Server and how the App will react on that response
+     * and was successful
      *
-     * @param response Response-Code from the Server
+     *
      */
-    void finished_unsubscribe(String response);
+    void finished_unsubscribe();
 
     /**
      * Called by HttpSubscriptionHelper after either a subscribe or unsubscribe Request has failed.

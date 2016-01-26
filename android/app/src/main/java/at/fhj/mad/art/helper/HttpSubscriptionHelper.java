@@ -113,7 +113,7 @@ public class HttpSubscriptionHelper extends AsyncTask<String, String, String> {
                     callbackHttpHelper.finished_subscribe(status);
                     break;
                 case "unsubscribe":
-                    callbackHttpHelper.finished_unsubscribe(status);
+                    callbackHttpHelper.finished_unsubscribe();
                     break;
             }
         } else {

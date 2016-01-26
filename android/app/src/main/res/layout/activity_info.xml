@@ -9,17 +9,46 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="69dp"
+        android:id="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:id="@+id/info_tf_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="71dp"
+            android:gravity="center"
+            android:text="@string/info_tf_team"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/info_tf_teamresult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5sp"
+            android:gravity="center"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="65dp">
 
         <TextView
-            android:id="@+id/settings_tf_server_is"
+            android:id="@+id/info_tf_server_is"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="71dp"
@@ -28,7 +57,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/settings_tf_server_status"
+            android:id="@+id/info_tf_server_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

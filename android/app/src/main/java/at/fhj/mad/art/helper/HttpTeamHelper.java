@@ -7,13 +7,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import at.fhj.mad.art.interfaces.ICallbackHttpStatusHelper;
+import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
 
 /**
  * Helper Class to verify the actual Pushserver status (online or offline)
  */
-public class HttpStatusHelper extends AsyncTask<String, String, String> {
+public class HttpTeamHelper extends AsyncTask<String, String, String> {
 
-    private ICallbackHttpStatusHelper callbackHttpHelper;
+    private ICallbackHttpTeamHelper callbackHttpHelper;
 
     @Override
     protected String doInBackground(String... params) {
@@ -32,10 +33,10 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
             int status = urlConnection.getResponseCode();
 
             // See, what server has sent back
-            if (status == 401) {
-                result = "active";
+            if (status == 200) {
+                result = urlConnection.getResponseMessage();
             } else {
-                result = "inactive";
+                result = "[]";
             }
 
         } catch (IOException e) {
@@ -61,11 +62,12 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        if (s.equals("active")) {
-            callbackHttpHelper.isAvailable(true);
-        } else {
-            callbackHttpHelper.isAvailable(false);
-        }
+      if(s.equals("[]")){
+          callbackHttpHelper.returnTeam("none");
+      }else{
+          callbackHttpHelper.returnTeam(s);
+      }
+
     }
 
     /**
@@ -73,7 +75,7 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
      *
      * @param callbackHttpHelper Activity which needs data from this helper class
      */
-    public void setCallbackHttpHelper(ICallbackHttpStatusHelper callbackHttpHelper) {
+    public void setCallbackHttpHelper(ICallbackHttpTeamHelper callbackHttpHelper) {
         this.callbackHttpHelper = callbackHttpHelper;
     }
 }

@@ -14,13 +14,16 @@ import android.widget.TextView;
 import at.fhj.mad.art.R;
 import at.fhj.mad.art.helper.HttpStatusHelper;
 import at.fhj.mad.art.helper.HttpSubscriptionHelper;
-import at.fhj.mad.art.interfaces.ICallbackHttpGETHelper;
+import at.fhj.mad.art.helper.HttpTeamHelper;
+import at.fhj.mad.art.helper.QuickstartPreferences;
+import at.fhj.mad.art.interfaces.ICallbackHttpStatusHelper;
+import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
 
 /**
  * Show InfoActivity where the User can change his Username
  * Also, User is redirected if on startup no username is set
  */
-public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETHelper {
+public class InfoActivity extends AppCompatActivity implements ICallbackHttpStatusHelper, ICallbackHttpTeamHelper {
 
     public static final String SHARED_PREFS_SETTINGS = "Settings";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -33,6 +36,7 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
     private Switch sw_active;
     private SharedPreferences.Editor editor;
     private TextView server_status;
+    private TextView currentTeam;
     private CountDownTimer cdt;
     private boolean isRunning;
 
@@ -46,7 +50,9 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
 
         activityContext = this;
 
-        server_status = (TextView) findViewById(R.id.settings_tf_server_status);
+        server_status = (TextView) findViewById(R.id.info_tf_server_status);
+        currentTeam = (TextView) findViewById(R.id.info_tf_teamresult);
+
 
 
 
@@ -95,8 +101,19 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
         HttpStatusHelper httpStatusHelper = new HttpStatusHelper();
         httpStatusHelper.setCallbackHttpHelper(this);
 
-        String url = "http://kerbtech.diphda.uberspace.de/art/";
+        String url = QuickstartPreferences.WEB_ADRESS;
         httpStatusHelper.execute(url);
+    }
+
+    /**
+     * Calls the server to check current team of logged in user
+     */
+    private void updateTeam() {
+        HttpTeamHelper httpTeamHelper = new HttpTeamHelper();
+        httpTeamHelper.setCallbackHttpHelper(this);
+
+        String url = QuickstartPreferences.WEB_ADRESS+"users/"+prefs.getInt("userID", -1)+"/team";
+        httpTeamHelper.execute(url);
     }
 
 
@@ -114,4 +131,8 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
         }
     }
 
+    @Override
+    public void returnTeam(String team) {
+       currentTeam.setText(team);
+    }
 }

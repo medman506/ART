@@ -53,7 +53,7 @@
                         android:gravity="center_horizontal"
                         android:minWidth="150dp"
                         android:padding="5dp"
-                        android:text="@string/settings_tv_tutors"
+                        android:text="@string/about_tf_page"
                         android:textColor="@color/black"
                         android:textSize="@dimen/contact_description"
                         android:textStyle="bold" />
@@ -64,7 +64,7 @@
                         android:padding="5dp"
                         android:scrollHorizontally="false"
                         android:singleLine="false"
-                        android:text="@string/settings_tv_krainz"
+                        android:text="http://kerbtech.diphda.uberspace.de/art2/"
                         android:textColor="@color/black"
                         android:textSize="@dimen/contact_content" />
 

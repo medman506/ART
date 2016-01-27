@@ -25,15 +25,8 @@ import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
  */
 public class InfoActivity extends AppCompatActivity implements ICallbackHttpStatusHelper, ICallbackHttpTeamHelper {
 
-    public static final String SHARED_PREFS_SETTINGS = "Settings";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static Handler handler;
-    private EditText input;
     private SharedPreferences prefs;
-    private Context context;
-    private HttpSubscriptionHelper httpSubscriptionHelper;
-    private Context activityContext;
-    private Switch sw_active;
     private SharedPreferences.Editor editor;
     private TextView server_status;
     private TextView currentTeam;
@@ -45,18 +38,17 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpStat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        prefs= getApplicationContext().getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
+        prefs= getApplicationContext().getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
         editor= prefs.edit();
 
-        activityContext = this;
 
         server_status = (TextView) findViewById(R.id.info_tf_server_status);
         currentTeam = (TextView) findViewById(R.id.info_tf_teamresult);
 
 
 
-
         updateServerStatus();
+        updateTeam();
 
         // Periodically check if Server is reachable or not
        isRunning = true;

@@ -34,6 +34,7 @@
     <string name="list_toast_task_deleted">Task deleted</string>
     <string name="title_activity_login">Sign in</string>
     <string name="info_tf_team">Current team: </string>
+    <string name="about_tf_page">Control Center: </string>
     <!-- Strings related to login -->
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>

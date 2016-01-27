@@ -1,8 +1,13 @@
 package at.fhj.mad.art.helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,6 +30,7 @@ public class HttpTeamHelper extends AsyncTask<String, String, String> {
         try {
             // params[0] is the given prepared url
             url = new URL(params[0]);
+            Log.i("URL",url.toString());
 
             // Build up an UrlConnection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -32,9 +38,23 @@ public class HttpTeamHelper extends AsyncTask<String, String, String> {
             // Get Server Status
             int status = urlConnection.getResponseCode();
 
+            // Get Server Response
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder out = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                out.append(line);
+            }
+
+            // Convert the finished result into an String
+            String tmp = out.toString();
+
+
             // See, what server has sent back
             if (status == 200) {
-                result = urlConnection.getResponseMessage();
+               result=tmp;
+                Log.i("TEAM",result);
             } else {
                 result = "[]";
             }

@@ -42,4 +42,5 @@
     <string name="nav_info">Info</string>
     <string name="nav_logout">Ausloggen</string>
     <string name="title_activity_login">Einloggen</string>
+    <string name="about_tf_page">Leitstelle: </string>
 </resources>

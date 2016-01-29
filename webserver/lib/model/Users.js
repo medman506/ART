@@ -47,33 +47,39 @@ var add = function (id, user, pass) {
     userItem.save();
 };
 
-//sets a token for user: gets called from client app
+/*
+Sets token for specific user id
+if passed token is null, removes token field from user
+*/
 var setTokenForUser = function (id, token){
 	if(token==null){
 		User.findOneAndUpdate({_id: id}, {$unset: {token: "" }}, function (err) {
-              if (err) console.error(err);
+              if (err) errorHandler(err);
            });
 	}else{
 	   User.findOneAndUpdate({_id: id}, {token: token}, function (err) {
-            if (err) console.error(err);
+            if (err) errorHandler(err);
         });
 	}
 };
 
-//sets a token for user: gets called from client app
+/*
+Set the team for the user which matches the passed id
+*/
 var setTeamForUser = function (id, team){
 	User.findOneAndUpdate({_id: id}, {team: team}, function (err) {
-           if (err) console.error(err);
+           if (err) errorHandler(err);
         });
 	
 };
 
-//return team für user id
+/*
+Find the team for the user which has the id which is passed as parameter
+See wrapped callback for what will be returned
+*/
 var getTeamForUser = function (id,callback){
-	console.log("ID:"+id);
 	var wrappedCallback = outputFilterWrapper(callback,'team');
 	User.find({_id: id}, 'team', function(err, obj) {
-		console.log("if: ",obj[0].team !== undefined);
 		if(obj[0].team !== undefined)                      
     			wrappedCallback(obj[0].team);
 		else
@@ -81,8 +87,10 @@ var getTeamForUser = function (id,callback){
 	});
 	
 };
-
-//get tokens for all queried teams
+/*
+Get tokens for users which have a team which matches one of the passed teams
+See wrapped callback for what will be returned
+*/
 var getTokenForTeams = function (teams, callback) {
     var wrappedCallback = outputFilterWrapper(callback,'token');
 
@@ -91,39 +99,51 @@ var getTokenForTeams = function (teams, callback) {
         .exec(wrappedCallback);
 };
 
+/*
+Get all users from db
+See wrapped callback for what will be returned
+*/
 var getAll = function (callback) {
-    console.log("getting all");
     var wrappedCallback = outputFilterWrapper(callback, 'all');
-
     User.find(wrappedCallback);
 };
 
+/*
+Find teams of all users which have a token set
+Teams are distinct(no multiple values of same team)
+See wrapped callback for what will be returned
+*/
 var getAllActiveTeams = function (callback) {
-    console.log("getting all temas");
     var wrappedCallback = outputFilterWrapper(callback, 'team');
-
     User.distinct('team').and([{ team: { $ne: null } }, {token: { $ne: null}}]).exec(wrappedCallback);
-      
 };
 
-
+/*
+Updates all tokens which mach fromToArray.From to new valuesfrom fromToArray.to
+*/
 var updateTokens = function (fromToArray) {
-    
 	fromToArray.forEach(function (tokenUpdate) {
         User.findOneAndUpdate({token: tokenUpdate.from}, {token: tokenUpdate.to}, function (err) {
-            if (err) console.error(err);
+            if (err) errorHandler(err);
         });
     });
 };
 
 
-
+/*
+Finds user credentials for passed username
+See wrapped callback for what will be returned
+*/
 var getPassForUser = function (username, callback) {
     var wrappedCallback = outputFilterWrapper(callback,'pass');
 
     User.find({user: username}, wrappedCallback);
 };
 
+/*
+Find tokens of users which have the passed id
+See wrapped callback for what will be returned
+*/
 var getTokenForUser = function (id, callback) {
     var wrappedCallback = outputFilterWrapper(callback,'token');
 
@@ -132,20 +152,30 @@ var getTokenForUser = function (id, callback) {
 
 
 
-//Set token null on unsubscribe
+/*
+Removes token from users where found token equals passed token
+*/
 var removeDevice = function (token) {
-    Users.update({token: token},{token: null}, function (err) {
-        if (err) console.log(err);
+    Users.update({token: token},{$unset: {token: "" }}, function (err) {
+        if (err) 
+	   errorHandler(err);
     });
 };
 
+/*
+Removes token from users where found token is in token array passed from caller
+*/
 var removeDevices = function (tokens) {
 	  
-	Users.update({token: {$in: tokens}},{token: null}, function (err) {
-        if (err) console.log(err);
+	Users.update({token: {$in: tokens}},{$unset: {token: "" }}, function (err) {
+        if (err) errorHandler(err);
     });
 };
 
+/*
+Format the output before submitting it to callback
+Depending on passed argument, different fields will be returned
+*/
 var outputFilterWrapper = function (callback, detail) {
     return function (err, pushItems) {
         if (err) return callback(err, null);
@@ -162,7 +192,6 @@ var outputFilterWrapper = function (callback, detail) {
 	}else if(detail === 'team'){
 		//Return team	
 		var items = _.map(pushItems, function (pushItem) {
-			console.log("IT: ", pushItem);
             		return pushItem;
         	});
 	}else{
@@ -176,8 +205,12 @@ var outputFilterWrapper = function (callback, detail) {
     }
 };
 
+/*
+Compares given credentials to DB
+Returns id of successful(valid credentials) 
+or 0 if no user was found or pw is wrong
+*/
 var authenticate = function (user, callback){
-	console.log(user);
 	getPassForUser(user.user, function (err, userIDs) {
         	if (!err) {
 			if(userIDs.length ==0)
@@ -206,6 +239,9 @@ var initWrapper = function (object) {
     });
 };
 
+/*
+Helper function to display errors
+*/
 var errorHandler = function(error) {
     console.error('ERROR: ' + error);
 };

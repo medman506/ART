@@ -10,8 +10,6 @@
     <string name="nav_contact">Contact</string>
     <string name="settings_username_hint">Username</string>
     <string name="settings_tv_developers">Developers</string>
-    <string name="settings_tv_tutors">Tutor</string>
-    <string name="settings_tv_krainz">Krainz Elmar</string>
     <string name="settings_tv_team">Höffernig Andreas \nMayerhofer Florian \nPfeifer Kevin</string>
     <string name="contact_btn_email">Email us</string>
     <string name="contact_btn_homepage">Bachelor degree course ITM13</string>
@@ -19,13 +17,9 @@
     <string name="main_toast_not_saved_token">Couldn\'t achieve/save GCM token!</string>
     <string name="main_toast_activated">Status successfully activated!</string>
     <string name="main_toast_gcm_failure">You haven\'t subscribed to the GCM Service successfully. Please check your internet connection!</string>
-    <string name="main_toast_no_username">Please enter a username in the settings!</string>
     <string name="main_toast_deactivated">Status successfully deactivated!</string>
     <string name="intent_start_through">Send Mail through</string>
-    <string name="settings_toast_username_didnt_change">Username didn\'t change!</string>
-    <string name="settings_toast_username_saved">Username successfully saved!</string>
     <string name="undefined_error">Something went wrong, sorry :(</string>
-    <string name="settings_toast_username_not_editable">You can\'t change your username while you\'re active!</string>
     <string name="task_tf_task">Task</string>
     <string name="task_tf_where">Location</string>
     <string name="task_bt_dismiss">Dismiss</string>
@@ -37,11 +31,10 @@
     <string name="list_toast_task_not_deleted">Task coudln\'t be deleted!</string>
     <string name="task_toast_data_from_list_error">Couldn\'t read all data from list!</string>
     <string name="task_tf_show_in_gmaps">Show in Google Maps</string>
-    <string name="dialog_no_gps">Please activate your GPS!</string>
-    <string name="posservice_toast_no_location">Couldn\'t track your position!</string>
     <string name="list_toast_task_deleted">Task deleted</string>
     <string name="title_activity_login">Sign in</string>
-
+    <string name="info_tf_team">Current team: </string>
+    <string name="about_tf_page">Control Center: </string>
     <!-- Strings related to login -->
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>

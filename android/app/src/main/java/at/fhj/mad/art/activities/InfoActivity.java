@@ -1,61 +1,35 @@
 package at.fhj.mad.art.activities;
 
-import android.app.ActivityManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import at.fhj.mad.art.R;
-import at.fhj.mad.art.gcm.QuickstartPreferences;
-import at.fhj.mad.art.gcm.RegistrationIntentService;
 import at.fhj.mad.art.helper.HttpStatusHelper;
 import at.fhj.mad.art.helper.HttpSubscriptionHelper;
-import at.fhj.mad.art.interfaces.ICallbackHttpGETHelper;
+import at.fhj.mad.art.helper.HttpTeamHelper;
+import at.fhj.mad.art.helper.QuickstartPreferences;
+import at.fhj.mad.art.interfaces.ICallbackHttpStatusHelper;
+import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
 
 /**
  * Show InfoActivity where the User can change his Username
  * Also, User is redirected if on startup no username is set
  */
-public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETHelper {
+public class InfoActivity extends AppCompatActivity implements ICallbackHttpStatusHelper, ICallbackHttpTeamHelper {
 
-    public static final String SHARED_PREFS_SETTINGS = "Settings";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static Handler handler;
-    private EditText input;
     private SharedPreferences prefs;
-    private Context context;
-    private HttpSubscriptionHelper httpSubscriptionHelper;
-    private Context activityContext;
-    private Switch sw_active;
     private SharedPreferences.Editor editor;
     private TextView server_status;
+    private TextView currentTeam;
     private CountDownTimer cdt;
     private boolean isRunning;
 
@@ -64,16 +38,17 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        prefs= getApplicationContext().getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
+        prefs= getApplicationContext().getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
         editor= prefs.edit();
 
-        activityContext = this;
 
-        server_status = (TextView) findViewById(R.id.settings_tf_server_status);
+        server_status = (TextView) findViewById(R.id.info_tf_server_status);
+        currentTeam = (TextView) findViewById(R.id.info_tf_teamresult);
 
 
 
         updateServerStatus();
+        updateTeam();
 
         // Periodically check if Server is reachable or not
        isRunning = true;
@@ -118,8 +93,19 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
         HttpStatusHelper httpStatusHelper = new HttpStatusHelper();
         httpStatusHelper.setCallbackHttpHelper(this);
 
-        String url = "http://kerbtech.diphda.uberspace.de/art/";
+        String url = QuickstartPreferences.WEB_ADRESS;
         httpStatusHelper.execute(url);
+    }
+
+    /**
+     * Calls the server to check current team of logged in user
+     */
+    private void updateTeam() {
+        HttpTeamHelper httpTeamHelper = new HttpTeamHelper();
+        httpTeamHelper.setCallbackHttpHelper(this);
+
+        String url = QuickstartPreferences.WEB_ADRESS+"users/"+prefs.getInt("userID", -1)+"/team";
+        httpTeamHelper.execute(url);
     }
 
 
@@ -137,4 +123,8 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpGETH
         }
     }
 
+    @Override
+    public void returnTeam(String team) {
+       currentTeam.setText(team);
+    }
 }

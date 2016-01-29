@@ -1,19 +1,25 @@
 package at.fhj.mad.art.helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import at.fhj.mad.art.interfaces.ICallbackHttpStatusHelper;
+import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
 
 /**
  * Helper Class to verify the actual Pushserver status (online or offline)
  */
-public class HttpStatusHelper extends AsyncTask<String, String, String> {
+public class HttpTeamHelper extends AsyncTask<String, String, String> {
 
-    private ICallbackHttpStatusHelper callbackHttpHelper;
+    private ICallbackHttpTeamHelper callbackHttpHelper;
 
     @Override
     protected String doInBackground(String... params) {
@@ -24,6 +30,7 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
         try {
             // params[0] is the given prepared url
             url = new URL(params[0]);
+            Log.i("URL",url.toString());
 
             // Build up an UrlConnection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -31,11 +38,25 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
             // Get Server Status
             int status = urlConnection.getResponseCode();
 
+            // Get Server Response
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder out = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                out.append(line);
+            }
+
+            // Convert the finished result into an String
+            String tmp = out.toString();
+
+
             // See, what server has sent back
-            if (status == 401) {
-                result = "active";
+            if (status == 200) {
+               result=tmp;
+                Log.i("TEAM",result);
             } else {
-                result = "inactive";
+                result = "[]";
             }
 
         } catch (IOException e) {
@@ -61,11 +82,12 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        if (s.equals("active")) {
-            callbackHttpHelper.isAvailable(true);
-        } else {
-            callbackHttpHelper.isAvailable(false);
-        }
+      if(s.equals("[]")){
+          callbackHttpHelper.returnTeam("none");
+      }else{
+          callbackHttpHelper.returnTeam(s);
+      }
+
     }
 
     /**
@@ -73,7 +95,7 @@ public class HttpStatusHelper extends AsyncTask<String, String, String> {
      *
      * @param callbackHttpHelper Activity which needs data from this helper class
      */
-    public void setCallbackHttpHelper(ICallbackHttpStatusHelper callbackHttpHelper) {
+    public void setCallbackHttpHelper(ICallbackHttpTeamHelper callbackHttpHelper) {
         this.callbackHttpHelper = callbackHttpHelper;
     }
 }

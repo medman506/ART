@@ -23,7 +23,6 @@ var initialize = _.once(function (configFilePath, overrides) {
 });
 
 var get = function (key) {
-    if (!config) initialize('../config.json');
     return config[key];
 };
 

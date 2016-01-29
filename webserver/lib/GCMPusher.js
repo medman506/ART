@@ -4,17 +4,17 @@
  * MIT Licensed
  */
 
-var config = require('./Config')
+var config = require('./Config');
 var _ = require('lodash');
 var gcm = require('node-gcm');
 var users = require('./model/Users');
-var apikey = "AIzaSyCNTPu0BUd-jLiBuNtT8VvWkebycX5yUM0"
 
 
+/*
+Sends the message to the GCM servers
+*/
 var push = function (tokens, message) {
-    var sender = new gcm.Sender(apikey);
-    console.log("tokens: "+tokens +"\n");
-        
+    var sender = new gcm.Sender(config.get('gcm').apiKey);       
     sender.send(message, { registrationTokens: tokens }, 4, function (err, res) {
         if(err) console.log(err);
         else console.log(res);
@@ -29,6 +29,10 @@ var push = function (tokens, message) {
     })
 };
 
+/*
+Handles the response from gcm
+checks if tokens are invalid or need to be updated
+*/
 var handleResults = function (results) {
     var idsToUpdate = [],
         idsToDelete = [];
@@ -46,17 +50,13 @@ var handleResults = function (results) {
     if (idsToDelete.length > 0) users.removeDevices(idsToDelete);
 };
 
+
+/*
+Adds the payload to the gcm message
+*/
 var buildPayload = function (options) {
     var message = new gcm.Message();
     message.addData(options);
-    
-    //maybe missing notification?
-    /*message.addNotification({
-	title: 'Alert!!!',
-  	body: 'TEST TEST TEST',
-  	icon: 'ic_launcher'
-    });*/
-    console.log('GCMPusher.js-line 47: ' + JSON.stringify(message));
     return message;
 };
 

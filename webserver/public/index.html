@@ -171,16 +171,17 @@
                     .serializeArray()
                     .reduce(function (prev, curr) {
                         var curVal = curr.value.trim();
-
+			console.log("v: ",curVal);
+			console.log("c: ",curr);
                         if (prev[curr.name] === undefined) {
                             prev[curr.name] = curVal;
                         } else {
                             if (typeof prev[curr.name] !== "object")
-                                prev[curr.name] = [curVal];
+                                prev[curr.name] = [prev[curr.name]];;
 
                             prev[curr.name].push(curVal);
                         }
-
+			
                         return prev;
                     }, {});
             }
@@ -195,7 +196,8 @@
             }
 
             function sendPush(formValues) {
-                var pushNotification = {};
+                var pushNotification = {};		
+		    console.log(formValues.users);
                 if (formValues.users)
                     pushNotification.users = [].concat(formValues.users);
 

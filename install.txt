@@ -1,0 +1,8 @@
+For Webserver:
+	MongoDB
+
+Then, values for server etc in config setzen
+
+App:
+	Webserver adresse setzen
+	gradle script build anpassen: applicationId setzen

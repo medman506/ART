@@ -19,7 +19,6 @@ import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
  */
 public class InfoActivity extends AppCompatActivity implements ICallbackHttpTeamHelper {
 
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private TextView server_status;

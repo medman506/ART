@@ -30,7 +30,6 @@ import com.google.android.gms.iid.InstanceID;
 import java.io.IOException;
 
 import at.fhj.mad.art.R;
-import at.fhj.mad.art.activities.ListActivity;
 import at.fhj.mad.art.helper.QuickstartPreferences;
 
 /**

@@ -1,17 +1,7 @@
 package at.fhj.mad.art.helper;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -19,15 +9,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
-import at.fhj.mad.art.R;
-import at.fhj.mad.art.activities.ListActivity;
-import at.fhj.mad.art.gcm.RegistrationIntentService;
-import at.fhj.mad.art.interfaces.ICallbackHttpPOSTHelper;
 import at.fhj.mad.art.interfaces.ICallbackLogin;
 
 
@@ -36,8 +20,6 @@ import at.fhj.mad.art.interfaces.ICallbackLogin;
  * the user.
  */
 public class LoginHelper extends AsyncTask<String, String, String>  {
-
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 
 

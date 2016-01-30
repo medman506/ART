@@ -38,7 +38,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import at.fhj.mad.art.R;
-import at.fhj.mad.art.activities.ListActivity;
 import at.fhj.mad.art.activities.ListTaskActivity;
 import at.fhj.mad.art.helper.QuickstartPreferences;
 import at.fhj.mad.art.helper.SQLiteHelper;

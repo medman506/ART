@@ -1,15 +1,17 @@
 package at.fhj.mad.art.interfaces;
 
+import at.fhj.mad.art.helper.TeamResult;
+
 /**
  * Interface for our HttpStatusHelper-Class
  */
 public interface ICallbackHttpTeamHelper {
 
     /**
-     * Returns the Team for a specific user
+     * Callback Method to return TeamResult object to caller
      *
-     * @param team: String of the current team
+     * @param tr: TeamResult Object
      */
-    void returnTeam(String team);
+    void returnTeamResult(TeamResult tr);
 
 }

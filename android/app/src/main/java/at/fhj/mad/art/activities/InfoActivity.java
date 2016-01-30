@@ -1,29 +1,23 @@
 package at.fhj.mad.art.activities;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import at.fhj.mad.art.R;
-import at.fhj.mad.art.helper.HttpStatusHelper;
-import at.fhj.mad.art.helper.HttpSubscriptionHelper;
 import at.fhj.mad.art.helper.HttpTeamHelper;
 import at.fhj.mad.art.helper.QuickstartPreferences;
-import at.fhj.mad.art.interfaces.ICallbackHttpStatusHelper;
+import at.fhj.mad.art.helper.TeamResult;
 import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
 
 /**
  * Show InfoActivity where the User can change his Username
  * Also, User is redirected if on startup no username is set
  */
-public class InfoActivity extends AppCompatActivity implements ICallbackHttpStatusHelper, ICallbackHttpTeamHelper {
+public class InfoActivity extends AppCompatActivity implements ICallbackHttpTeamHelper {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private SharedPreferences prefs;
@@ -38,40 +32,42 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpStat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        prefs= getApplicationContext().getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
+        prefs= getApplicationContext().getSharedPreferences(QuickstartPreferences.SHARED_PREFS_SETTINGS, 0);
         editor= prefs.edit();
-
 
         server_status = (TextView) findViewById(R.id.info_tf_server_status);
         currentTeam = (TextView) findViewById(R.id.info_tf_teamresult);
 
-
-
-        updateServerStatus();
+        //Call Server  to update team and serverstatus
         updateTeam();
 
         // Periodically check if Server is reachable or not
        isRunning = true;
 
-        cdt = new CountDownTimer(10000, 1000) {
+        /*
+        Countdowntimer to update server status and current team
+         */
+        cdt = new CountDownTimer(10000, 10000) {
 
+            //Do nothing in tick
             public void onTick(long millisUntilFinished) {
+                //No implementation
             }
 
             public void onFinish() {
-                updateServerStatus();
-                // Restart Countdown to do this task every 5 seconds
+                updateTeam();
+                // Restart Countdown
                 if (isRunning) {
                     cdt.start();
                 }
             }
-
         };
-
         cdt.start();
-
     }
 
+    /**
+     * Cancel countdowntimer
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -83,22 +79,8 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpStat
         isRunning = false;
     }
 
-
-
-
     /**
-     * Calls the helper method to check the current server status
-     */
-    private void updateServerStatus() {
-        HttpStatusHelper httpStatusHelper = new HttpStatusHelper();
-        httpStatusHelper.setCallbackHttpHelper(this);
-
-        String url = QuickstartPreferences.WEB_ADRESS;
-        httpStatusHelper.execute(url);
-    }
-
-    /**
-     * Calls the server to check current team of logged in user
+     * Calls the HttpTeamhelper to retrieve team of logged in user and status of Webserver
      */
     private void updateTeam() {
         HttpTeamHelper httpTeamHelper = new HttpTeamHelper();
@@ -108,11 +90,15 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpStat
         httpTeamHelper.execute(url);
     }
 
-
-
+    /**
+     * Implementation of Callback Method
+     * Displays current team and server status
+     * @param tr: TeamResult Object
+     */
     @Override
-    public void isAvailable(boolean status) {
-        editor.putBoolean("serverstatus", status);
+    public void returnTeamResult(TeamResult tr) {
+        currentTeam.setText(tr.getTeam());
+        editor.putBoolean("serverstatus", tr.isActive());
         editor.apply();
         if (prefs.getBoolean("serverstatus", false)) {
             server_status.setText(getResources().getString(R.string.main_tf_server_active));
@@ -121,10 +107,5 @@ public class InfoActivity extends AppCompatActivity implements ICallbackHttpStat
             server_status.setText(getResources().getString(R.string.main_tf_server_inactive));
             server_status.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
         }
-    }
-
-    @Override
-    public void returnTeam(String team) {
-       currentTeam.setText(team);
     }
 }

@@ -28,8 +28,8 @@ public class ContactActivity extends AppCompatActivity {
         btn_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:kevin.pfeifer@edu.fh-joanneum.at"));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MoAppDev-ART Feedback");
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:florian.mayerhofer@edu.fh-joanneum.at"));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "ARTv2 Feedback");
                 try {
                     startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.intent_start_through)));
                 } catch (Exception e) {

@@ -94,7 +94,7 @@ public class RegistrationIntentService extends IntentService {
     private void saveRegistration(String token) {
         // Safe received token to SharedPreferences
 
-        SharedPreferences prefs = getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
+        SharedPreferences prefs = getSharedPreferences(QuickstartPreferences.SHARED_PREFS_SETTINGS, 0);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("token", token);
         editor.apply();

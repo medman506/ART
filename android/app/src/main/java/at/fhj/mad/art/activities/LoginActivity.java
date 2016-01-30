@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        prefs = getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS, 0);
+        prefs = getSharedPreferences(QuickstartPreferences.SHARED_PREFS_SETTINGS, 0);
         // Set up the login form.
         mUsername = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -87,8 +87,8 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mUserSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mUserSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -293,7 +293,6 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
                 startService(intent);
             }else {
                 //subscribe
-
                 try {
                     call_subscribe(userID);
                 } catch (Exception e) {
@@ -318,15 +317,12 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         HttpSubscriptionHelper httpSubscriptionHelper= new HttpSubscriptionHelper();
         httpSubscriptionHelper.setCallback(this);
 
-
         String url = QuickstartPreferences.WEB_ADRESS.concat(QuickstartPreferences.SUBSCRIBE);
         JSONObject obj = new JSONObject();
-
 
         obj.put("user", URLEncoder.encode(String.valueOf(id), "UTF-8"));
         obj.put("token", URLEncoder.encode(prefs.getString(RegistrationIntentService.TOKEN, ""), "UTF-8"));
         httpSubscriptionHelper.execute(url, obj.toString(), "subscribe");
-
     }
 
 
@@ -342,13 +338,12 @@ public class LoginActivity extends AppCompatActivity implements ICallbackLogin, 
         Intent listIntent = new Intent(getApplicationContext(), ListActivity.class);
         startActivity(listIntent);
         finish();
-
-
     }
 
     @Override
     public void finished_unsubscribe() {
         //Not implemented
+        //Implemented in Listactivity
     }
 
     @Override

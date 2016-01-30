@@ -31,6 +31,7 @@ import java.util.Collections;
 import at.fhj.mad.art.R;
 import at.fhj.mad.art.adapters.TwoLineAdapter;
 import at.fhj.mad.art.helper.HttpSubscriptionHelper;
+import at.fhj.mad.art.helper.QuickstartPreferences;
 import at.fhj.mad.art.helper.SQLiteHelper;
 import at.fhj.mad.art.helper.SwipeDetector;
 import at.fhj.mad.art.helper.UpdateHelper;
@@ -64,14 +65,12 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     //Helper class for db access
     private SQLiteHelper sqLiteHelper;
 
-    //SHAREDPREFS String
-    public static final String SHARED_PREFS_SETTINGS = "ART_Settings";
     private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        prefs = getSharedPreferences(SHARED_PREFS_SETTINGS, 0);
+        prefs = getSharedPreferences(QuickstartPreferences.SHARED_PREFS_SETTINGS, 0);
 
         // Redirect to login screen screen if none is "logged in"
         if (prefs.getInt("userID", -1)==-1) {
@@ -95,6 +94,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
         mActivityTitle = getTitle().toString();
 
+        //Setting up Drawer( option menu)
         addDrawerItems();
         setupDrawer();
 
@@ -364,6 +364,7 @@ public class ListActivity extends AppCompatActivity implements ICallbackUpdateLi
     @Override
     public void finished_subscribe(String response) {
         //not implemented here
+        //used in login activity
     }
 
     @Override

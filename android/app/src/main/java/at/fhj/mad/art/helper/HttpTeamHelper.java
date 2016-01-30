@@ -11,21 +11,21 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import at.fhj.mad.art.interfaces.ICallbackHttpStatusHelper;
 import at.fhj.mad.art.interfaces.ICallbackHttpTeamHelper;
 
 /**
- * Helper Class to verify the actual Pushserver status (online or offline)
+ * Helper Class to check Serverstate and team of logged in user
  */
-public class HttpTeamHelper extends AsyncTask<String, String, String> {
+public class HttpTeamHelper extends AsyncTask<String, String, TeamResult> {
 
     private ICallbackHttpTeamHelper callbackHttpHelper;
 
     @Override
-    protected String doInBackground(String... params) {
+    protected TeamResult doInBackground(String... params) {
         URL url;
         HttpURLConnection urlConnection = null;
-        String result = "";
+        //Default response if server is not reachable
+        TeamResult result = new TeamResult(false,"none");
 
         try {
             // params[0] is the given prepared url
@@ -51,12 +51,9 @@ public class HttpTeamHelper extends AsyncTask<String, String, String> {
             String tmp = out.toString();
 
 
-            // See, what server has sent back
+            // On successful request, set response
             if (status == 200) {
-               result=tmp;
-                Log.i("TEAM",result);
-            } else {
-                result = "[]";
+               result= new TeamResult(true,tmp);
             }
 
         } catch (IOException e) {
@@ -75,24 +72,20 @@ public class HttpTeamHelper extends AsyncTask<String, String, String> {
 
     /**
      * Callback to calling methods
-     *
-     * @param s return parameter from doInBackground-Method
+     * @param tr return parameter from doInBackground-Method
      */
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(TeamResult tr) {
+        super.onPostExecute(tr);
 
-      if(s.equals("[]")){
-          callbackHttpHelper.returnTeam("none");
-      }else{
-          callbackHttpHelper.returnTeam(s);
-      }
-
+        //Set team to "none" if empty
+        if(tr.getTeam().equals("[]"))
+            tr.setTeam("none");
+        callbackHttpHelper.returnTeamResult(tr);
     }
 
     /**
      * Sets the activity which implements the HttpStatusHelper Interface
-     *
      * @param callbackHttpHelper Activity which needs data from this helper class
      */
     public void setCallbackHttpHelper(ICallbackHttpTeamHelper callbackHttpHelper) {

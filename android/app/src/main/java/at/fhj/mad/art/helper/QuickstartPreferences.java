@@ -17,16 +17,19 @@
 package at.fhj.mad.art.helper;
 
 /**
- * Saves static strings used in gcm
+ * Static Strings which are used in the application
  */
 public class QuickstartPreferences {
 
+    //GCM
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
-
+    //Server adresses
     public static final String WEB_ADRESS = "http://kerbtech.diphda.uberspace.de/art2/";
     public static final String LOGIN = "login";
     public static final String SUBSCRIBE = "subscribe";
+    //SHAREDPREFS String
+    public static final String SHARED_PREFS_SETTINGS = "ART_Settings";
 
 
 }

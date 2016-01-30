@@ -40,6 +40,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 import at.fhj.mad.art.R;
 import at.fhj.mad.art.activities.ListActivity;
 import at.fhj.mad.art.activities.ListTaskActivity;
+import at.fhj.mad.art.helper.QuickstartPreferences;
 import at.fhj.mad.art.helper.SQLiteHelper;
 import at.fhj.mad.art.helper.UpdateHelper;
 import at.fhj.mad.art.model.Task;
@@ -65,7 +66,7 @@ public class MyGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
-        SharedPreferences prefs= getSharedPreferences(ListActivity.SHARED_PREFS_SETTINGS,0);
+        SharedPreferences prefs= getSharedPreferences(QuickstartPreferences.SHARED_PREFS_SETTINGS,0);
 
 
         Log.i("NOTIFICATION","NEW NOTIFICATION");
@@ -139,7 +140,5 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Handler mHandler = new Handler(Looper.getMainLooper());
         mHandler.postDelayed(r, 10000);
-
-
     }
 }

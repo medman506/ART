@@ -5,27 +5,30 @@
 
 Lets just assume that you are in need of medical help. You will call 144, 112 or 911, right? 
 
-It seems like the next emergency team takes for ages to reach you. It may be caused because not every member of the team has a pager. 
+It seems like the next emergency team takes for ages to reach you. The reason for this might be, that each team member has to be alertet seperately, which takes a lot of time.  
 
 This is still a major problem in our actual emergency call chain, especially in smaller emergency stations.
 
-Due to this problem, we have created an app which allows all medical educated staff to be notified if there are new missions.
+Due to this problem, we have created an app which allows emergency staff to be notified if there are new missions.
 
 ## How does this work?
 
-Personnel can log into this app and will be alerted of new missions via PUSH NOTIFICATIONS.
-The dispatcher can use a web interface to send notifications to whole teams.
+* Personnel can log into this app and will be alerted of new missions via PUSH NOTIFICATIONS.
+* The App does not even have to be running in foreground. 
+* The user gets notified by sound, vibration and the LED, even if the phone is muted.
+* The dispatcher can use a web interface to send notifications to whole teams.
 
 Actual informations are:
 
 * What is the main problem?
-* Where is the place? (link to Google Maps)
+* What is its priority?
+* Where is the place? (including a link to Google Maps)
 
 ## Why has this project been made?
 
 Project 'ART' was built during an bachelor degree course called "Mobile App Development" in the bachelor course 'ITM13'.
 
-This is a Fork of this Project which is implemented as part of a Bachelors Thesis. Based on the research of the thesis, this project is rewritten to suite the needs of actual users even better. 
+This is a fork of ART which was enhanced by conducting user interviews and the usage of Guidelines for Notification Systems found in the corresponding Bachelor Thesis.
 
 ## General structure
 
@@ -33,6 +36,8 @@ This is a Fork of this Project which is implemented as part of a Bachelors Thesi
 * Folder 'webserver' contains the management website. 
 
 ## Installation
+
+See install.txt
 
 ### Android
 
@@ -43,7 +48,7 @@ or
 Clone the whole project into Android Studio and deploy it from there.
 
 * Requirements: Android 4.1+ (API Level 16)
-* IMPORTANT: The Webserver-URL is actually hard coded written in the project. If you use your own Webserver instead of the default one (http://kerbtech.diphda.uberspace.de/art/) please change this in the project. 
+* IMPORTANT:The webserver adress as well as api keys and several credentials have to be adjusted prior to using this app. 
 
 ### Webserver
 
@@ -53,11 +58,10 @@ Clone the whole project into Android Studio and deploy it from there.
 
 The Webserver offers a basic protection. 
 
-
 To use the server, copy everything from the 'webserver' folder to your desired webserver direction.
 
-Start Server with './bin/pushserver.js'
+Start Server with './bin/pushserver.js -c <path to your config.json>'
 
-NOTE AGAIN THAT THE WEBSERVER URL IS HARD CODED IN THE ANDROID PROJECT
+NOTE AGAIN THAT THE WEBSERVER AND GCM ID HAVE TO BE ADJUSTED IN ANDROID PROJECT
 
 * Requirements: NodeJS, MongoDB

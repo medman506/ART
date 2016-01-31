@@ -1,8 +1,11 @@
 For Webserver:
-	MongoDB
-
-Then, values for server etc in config setzen
-
+	Google Project with activated GCM API 
+		(https://console.developers.google.com)
+		(https://developers.google.com/cloud-messaging/android/client)
+		(https://github.com/Redth/PushSharp/wiki/How-to-Configure-&-Send-GCM-Google-Cloud-Messaging-Push-Notifications-using-PushSharp)
+	MongoDB has to be installed.
+	In MongoDB, a Database and a user with access to it has to be created
+	Values in config.json have to be adjusted (Mongo URL, Mongo User, Google API KEY,...)
 App:
-	Webserver adresse setzen
-	gradle script build anpassen: applicationId setzen
+	Webserver adresse in Strings.xml sowie QuickSettings.java
+	Gradle Script "build" anpassen: Google Project ID setzen

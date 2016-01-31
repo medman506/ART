@@ -65,3 +65,10 @@ Start Server with './bin/pushserver.js -c <path to your config.json>'
 NOTE AGAIN THAT THE WEBSERVER AND GCM ID HAVE TO BE ADJUSTED IN ANDROID PROJECT
 
 * Requirements: NodeJS, MongoDB
+
+### DEMO
+For Demo purposes, use the apk provided.
+Adress of Webserver: <TBA>
+Credentials: <TBA>
+
+
